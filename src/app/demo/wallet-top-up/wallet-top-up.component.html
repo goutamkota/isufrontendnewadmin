@@ -1,0 +1,173 @@
+<div class="wallet-top-up-container">
+
+    <div class="bank-table-filters">
+      <button type="button" class="btn btn-primary" (click)="addBankModal.show()">Add Bank</button>
+    </div>
+
+    <div class="dataTable" *ngIf="banks.length">
+      <ngx-datatable #table class="material" [headerHeight]="50" [footerHeight]="50" [limit]="50" [rows]="banks" columnMode="force" [scrollbarH]="true" [columns]="bankListHeaders" [rowHeight]="50"></ngx-datatable>
+    </div>
+
+    <ng-template #actionTemplate let-row="row" let-col="column">
+      <div class="action-container">
+        <i class="feather icon-edit"></i>
+        <i class="feather icon-trash"></i>
+        <i class="feather icon-book" [placement]="'left'" ngbTooltip="Passbook" (click)="showImage({image: row.passbookUrl, type: 'passbook'})"></i>
+        <span [placement]="'left'" ngbTooltip="Cheque" (click)="showImage({image: row.chequeUrl, type: 'cheque'})">
+          <svg  version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 100.75 100.748" style="enable-background:new 0 0 100.75 100.748;" xml:space="preserve">
+            <g>
+              <path d="M17.313,56.946c0-0.803-0.65-1.453-1.453-1.453s-1.453,0.65-1.453,1.453c0,4.053,3.59,7.411,8.252,7.996v6.205
+                c0,0.803,0.65,1.453,1.453,1.453s1.453-0.65,1.453-1.453V64.94c4.656-0.592,8.238-3.946,8.238-7.993
+                c0-4.045-3.583-7.395-8.238-7.986V38.614c3.045,0.51,5.332,2.585,5.332,5.064c0,0.803,0.65,1.453,1.453,1.453
+                s1.453-0.65,1.453-1.453c0-4.049-3.583-7.403-8.238-7.992v-6.213c0-0.803-0.65-1.453-1.453-1.453s-1.453,0.65-1.453,1.453v6.213
+                c-4.663,0.588-8.252,3.942-8.252,7.992c0,4.046,3.589,7.399,8.252,7.985v10.352C19.607,61.507,17.313,59.429,17.313,56.946z
+                M30.897,56.946c0,2.477-2.287,4.552-5.332,5.065V51.888C28.61,52.4,30.897,54.472,30.897,56.946z M17.313,43.678
+                c0-2.479,2.293-4.555,5.346-5.064v10.122C19.606,48.227,17.313,46.154,17.313,43.678z"/>
+              <path d="M96.51,20.412H3.492c-0.803,0-1.453,0.65-1.453,1.453v59.19c0,0.803,0.65,1.453,1.453,1.453H96.51
+                c0.803,0,1.453-0.65,1.453-1.453v-59.19C97.963,21.062,97.312,20.412,96.51,20.412z M95.057,79.602H4.945V23.318h90.111V79.602z"/>
+              <path d="M45.77,40.236h42.282c0.803,0,1.453-0.65,1.453-1.453s-0.65-1.453-1.453-1.453H45.77c-0.803,0-1.453,0.65-1.453,1.453
+                S44.967,40.236,45.77,40.236z"/>
+              <path d="M45.77,51.762h42.282c0.803,0,1.453-0.65,1.453-1.453c0-0.803-0.65-1.453-1.453-1.453H45.77
+                c-0.803,0-1.453,0.65-1.453,1.453C44.317,51.111,44.967,51.762,45.77,51.762z"/>
+              <path d="M45.77,65.583h42.282c0.803,0,1.453-0.65,1.453-1.453s-0.65-1.453-1.453-1.453H45.77c-0.803,0-1.453,0.65-1.453,1.453
+                S44.967,65.583,45.77,65.583z"/>
+            </g>
+          </svg>
+        </span>
+      </div>
+    </ng-template>
+
+</div>
+
+<app-ui-modal #addBankModal dialogClass="modal-dialog-centered modal-max-600">
+
+  <div class="app-modal-header">
+    <h5 class="modal-title">Add Bank</h5>
+    <button type="button" class="close basic-close" data-dismiss="modal" aria-label="Close" (click)="addBankModal.hide()"><span aria-hidden="true">&times;</span></button>
+  </div>
+
+  <div class="app-modal-body add-bank-form">
+    <form [formGroup]="addBankForm" (submit)="addBank()">
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group position-relative">
+            <input type="text" class="form-control" placeholder="Bank Name" formControlName="bankName" (input)="searchBank($event)">
+            <div class="bank-list position-absolute w-100 bg-light" *ngIf="showBanklist">
+              <ul class="nav w-100 d-block">
+                <li class="bene-name p-2 border-bottom btn-light" *ngIf="bankDetails.length == 0 && showBanklist" (click)="showBanklist = false">
+                  <article class="bene-info">
+                    <p class="err-message m-0">No data found</p>
+                  </article>
+                </li>
+                <li *ngFor="let bank of bankDetails" class="bene-name p-2 border-bottom btn-light" (click)="populatebank(bank)">
+                  <article class="bene-info">
+                    <h6>{{bank.bankName | titlecase}}</h6>
+                    <p class="mb-0">{{bank.ifsc}}</p>
+                  </article>
+                </li>
+              </ul>
+          </div>
+          </div>          
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Branch Name" formControlName="branchName">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="IFSC Code" formControlName="ifscCode">
+          </div>         
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="A/C No." formControlName="accountNo">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="A/C Holder" formControlName="accountHolderName">
+          </div>        
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <select class="custom-select" formControlName="accountType">
+              <option value="">Select A/C Type</option>
+              <option value="current">CURRENT</option>
+              <option value="saving">SAVING</option>
+              <option value="fixed_deposite">FIXED DEPOSIT</option>
+            </select>
+            <div class="invalid-feedback">Example invalid custom select feedback</div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="custom-file mb-3">
+            <input type="file" class="custom-file-input" id="validatedCustomFilePassbook" (change)="observePassbook($event)">
+            <label class="custom-file-label" for="validatedCustomFilePassbook"><i class="feather icon-upload-cloud"></i>&nbsp;Upload Passbook</label>
+            <small class="form-text text-muted">{{ filenames.passbook }}</small>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="custom-file">
+            <input type="file" class="custom-file-input" id="validatedCustomFileCheque" (change)="observeCheque($event)">
+            <label class="custom-file-label" for="validatedCustomFileCheque"><i class="feather icon-upload-cloud"></i>&nbsp;Upload Cheque</label>
+            <small class="form-text text-muted">{{ filenames.cheque }}</small>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <p class="text-danger mb-1 note"><b>NOTE: </b></p>
+          <ol>
+            <li class="text-danger mb-1">Upload Passbook & Cheque in the following formats: 
+              <ul class="text-danger mb-1 allowed-formats-list">
+                <li>gif</li>
+                <li>png</li>
+                <li>bmp</li>
+              </ul>
+              <ul class="text-danger mb-1 allowed-formats-list">
+                <li>jpeg</li>
+                <li>jpg</li>
+                <li>pdf</li>
+              </ul>
+            </li>
+            <li class="text-danger mb-1">File size should be upto <b>1 MB</b>.</li>
+          </ol>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="add-bank-submit-btn-container">
+            <button type="submit" class="btn btn-primary" [disabled]="addBankForm.invalid">Submit</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</app-ui-modal>
+
+<app-ui-modal #imageModal dialogClass="modal-dialog-centered modal-max-600">
+
+  <div class="app-modal-header">
+    <h5 *ngIf="currentImageData.type" class="modal-title">{{ currentImageData.type | titlecase }}</h5>
+    <button type="button" class="close basic-close" data-dismiss="modal" aria-label="Close" (click)="imageModal.hide()"><span aria-hidden="true">&times;</span></button>
+  </div>
+
+  <div class="app-modal-body">
+    <div class="image-container">
+      <img *ngIf="currentImageData.image" [src]="currentImageData.image" alt="" />
+    </div>
+  </div>
+</app-ui-modal>
+
+<ngx-spinner name="fetchBanksSpinner"><p style="color: white; margin-top: 50px;" > Fetching Banks List... </p></ngx-spinner>
+<ngx-spinner name="fileUploadSpinner"><p style="color: white; margin-top: 50px;" > Uploading File... </p></ngx-spinner>
+<ngx-spinner name="addBankSpinner"><p style="color: white; margin-top: 50px;" > Adding Bank... </p></ngx-spinner>

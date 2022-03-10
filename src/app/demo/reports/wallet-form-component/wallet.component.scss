@@ -1,0 +1,35 @@
+.submitBtnCol {
+  // display: flex;
+  // flex-direction: column;
+  // justify-content: flex-end;
+  // .form-group {
+  //   margin-bottom: 2.4rem;
+  // }
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  button {
+    border-radius: 5px;
+  }
+}
+
+.date-valid-message {
+  color: red;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.form-control[readonly] {
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.cursor-pointer {
+
+  input,
+  label {
+    cursor: pointer;
+  }
+}

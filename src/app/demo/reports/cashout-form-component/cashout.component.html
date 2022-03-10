@@ -1,0 +1,91 @@
+<form [formGroup]="reportForm" (submit)="submitReport()">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="form-group">
+        <label for="subCat1">Report Type: </label>
+        <select class="form-control" id="dmtReport" formControlName="subCat">
+          <option value="aeps" id="customRadioInline1"  class="custom-control-input">AEPS Cashout</option>
+          <option value="matm" id="customRadioInline2"  class="custom-control-input">mATM Cashout</option>
+          <option value="wallet2" id="customRadioInline3"  class="custom-control-input">Wallet2 Cashout</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="form-group">
+        <label for="dateRange">From Date :</label>
+        <div class="input-group">
+        <div class="input-group-prepend"> <span class="input-group-text"> <i class="fa fa-calendar"></i> </span> </div>  
+        <input name="dateRange"  [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="dateRange"  class="form-control"  [max]="today" [min]="minimumDate" readonly="true"  placeholder="MM-DD-YYYY" (ngModelChange)="saverange($event)">
+          <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+        </div>
+          <!-- <small class="form-text date-valid-message"
+          [ngStyle]="{'opacity': reportForm.get('dateRange').hasError('incorrect') ? '1' : '0'}">Maximum range value is
+          10.</small> -->
+        <!-- <label for="dateRange">Select Range: </label>
+        <input name="dateRange" formControlName="dateRange" [owlDateTime]="dateRange"
+          placeholder="DD-MM-YYYY - DD-MM-YYYY" [owlDateTimeTrigger]="dateRange" class="form-control"
+          [selectMode]="'range'" [rangeSeparator]="' - '" [max]="today" [min]="minimumDate" readonly="true" />
+
+        <owl-date-time [firstDayOfWeek]="'1'" [pickerType]="'calendar'" #dateRange></owl-date-time>
+        <small class="form-text date-valid-message"
+          [ngStyle]="{'opacity': reportForm.get('dateRange').hasError('incorrect') ? '1' : '0'}">Maximum range value is
+          10.</small> -->
+      </div>
+    </div>
+    <div class="col-md-3">
+      <label for="dateRange">To Date : </label>
+      <div class="input-group">
+        <div class="input-group-prepend"> <span class="input-group-text"> <i class="fa fa-calendar"></i> </span> </div>
+        <input name="dateRange"  [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" formControlName="dateRange1"   class="form-control" [max]="somedate1" [min]="minimumDate1" readonly="true"  placeholder="MM-DD-YYYY">
+        <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+      </div>
+        <!-- <small class="form-text date-valid-message"
+        [ngStyle]="{'opacity': reportForm.get('dateRange1').hasError('incorrect') ? '1' : '0'}">Maximum range value is
+        10.</small> -->
+      </div>
+    <!-- <div class="col-md-3">
+      <div class="form-group">
+        <label for="subCat1">Report Type: </label>
+        <select class="form-control" id="dmtReport" formControlName="subCat">
+          <option value="aeps" id="customRadioInline1"  class="custom-control-input">AEPS Cashout</option>
+          <option value="matm" id="customRadioInline2"  class="custom-control-input">mATM Cashout</option>
+          <option value="wallet2" id="customRadioInline3"  class="custom-control-input">Wallet2 Cashout</option>
+        </select>
+      </div> -->
+      <!-- <label>Select Sub-category: </label>
+      <div class="subCatContainer">
+        <div class="custom-control custom-radio custom-control-inline">
+          <input type="radio" id="customRadioInline1" formControlName="subCat" class="custom-control-input"
+            value="aeps">
+          <label class="custom-control-label" for="customRadioInline1">AEPS Cashout</label>
+        </div>
+        <div class="custom-control custom-radio custom-control-inline">
+          <input type="radio" id="customRadioInline2" formControlName="subCat" class="custom-control-input"
+            value="matm">
+          <label class="custom-control-label" for="customRadioInline2">mATM Cashout</label>
+        </div>
+        <div class="custom-control custom-radio custom-control-inline">
+          <input type="radio" id="customRadioInline3" formControlName="subCat" class="custom-control-input"
+            value="wallet2">
+          <label class="custom-control-label" for="customRadioInline3">Wallet2 Cashout</label>
+        </div>
+      </div> -->
+    <!-- </div> -->
+    <div class="col-md-3 mb-sm-4">
+      <ng-container *ngIf="reportForm.get('subCat').value === 'wallet2'">
+        <div class="form-group">
+          <label>Operation Performed: </label>
+          <select class="form-control" formControlName="operationPerformed">
+            <!-- <option disabled value="">Select</option> -->
+            <option value="WALLET2CASHOUT">Wallet2 Cashout</option>
+          </select>
+        </div>
+      </ng-container>
+    </div>
+    <div class="col-md-2 submitBtnCol">
+      <div class="form-group">
+        <button style="margin-bottom: -36%;" type="submit" class="btn btn-primary" [disabled]="reportForm.invalid"><i class="fa fa-search"></i>  Submit</button>
+      </div>
+    </div>
+  </div>
+</form>

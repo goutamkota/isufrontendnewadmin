@@ -1,0 +1,30 @@
+.switch_topbar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 55px;
+    background: #00bed4;
+    color: white;
+    padding: 1%;
+}
+.switch_cnt{
+    padding-bottom: 3%;
+}
+.back{
+    border: 0px transparent;
+    box-shadow: 0px 0px 1px 0px #ffffff;
+}
+.switch_title{
+    font-size: 30px;
+}
+.minimize{
+    display: flex;
+    text-align: center;
+    color: white;
+}
+.switch_box{
+    border: 1px solid black;
+    border-radius: 3px;
+    margin: 2% 1%;
+    padding: 2%;
+}

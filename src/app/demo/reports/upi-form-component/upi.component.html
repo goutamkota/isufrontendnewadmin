@@ -1,0 +1,97 @@
+<form [formGroup]="reportForm" (submit)="submitReport()">
+  <div class="row">
+    <!-- <div class="col-md-3">
+      <div class="form-group">
+        <label for="dateRange">Select Range: </label>
+        <input name="dateRange" formControlName="dateRange" [owlDateTime]="dateRange"
+          placeholder="DD-MM-YYYY - DD-MM-YYYY" [owlDateTimeTrigger]="dateRange" class="form-control"
+          [selectMode]="'range'" [rangeSeparator]="' - '" [max]="today" [min]="minimumDate" readonly="true" />
+
+        <owl-date-time [firstDayOfWeek]="'1'" [pickerType]="'calendar'" #dateRange></owl-date-time>
+        <small class="form-text date-valid-message"
+          [ngStyle]="{'opacity': reportForm.get('dateRange').hasError('incorrect') ? '1' : '0'}">Maximum range value is
+          10.</small>
+      </div>
+    </div> -->
+    <div class="col-md-3">
+      <div class="form-group">
+        <label for="subCat1">Select Sub-category: </label>
+        <select class="form-control" id="dmtReport" formControlName="subCat">
+          <option value="upi" id="customRadioInline3" class="custom-control-input">UPI</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="form-group">
+        <label for="dateRange">From Date :</label>
+        <div class="input-group">
+          <div class="input-group-prepend"> <span class="input-group-text"> <i class="fa fa-calendar"></i> </span>
+          </div>
+          <input name="dateRange" [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="dateRange"
+            class="form-control" [max]="today" [min]="minimumDate" readonly="true" placeholder="MM-DD-YYYY"
+            (ngModelChange)="saverange($event)">
+          <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+        </div>
+        <!-- <small class="form-text date-valid-message"
+          [ngStyle]="{'opacity': reportForm.get('dateRange').hasError('incorrect') ? '1' : '0'}">Maximum range value is
+          10.</small> -->
+        <!-- <input name="dateRange" formControlName="dateRange" [owlDateTime]="dateRange"
+          placeholder="DD-MM-YYYY - DD-MM-YYYY" [owlDateTimeTrigger]="dateRange" class="form-control"
+          [selectMode]="'range'" [rangeSeparator]="' - '" [max]="today" [min]="minimumDate" readonly="true" />
+
+        <owl-date-time [firstDayOfWeek]="'1'" [pickerType]="'calendar'" #dateRange></owl-date-time>
+        <small class="form-text date-valid-message"
+          [ngStyle]="{'opacity': reportForm.get('dateRange').hasError('incorrect') ? '1' : '0'}">Maximum range value is
+          10.</small> -->
+      </div>
+    </div>
+    <div class="col-md-3">
+      <label for="dateRange">To Date :</label>
+      <div class="input-group">
+        <div class="input-group-prepend"> <span class="input-group-text"> <i class="fa fa-calendar"></i> </span> </div>
+        <input name="dateRange" [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" formControlName="dateRange1"
+          class="form-control" [max]="somedate1" [min]="minimumDate1" readonly="true" placeholder="MM-DD-YYYY">
+        <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+      </div>
+      <!-- <small class="form-text date-valid-message"
+        [ngStyle]="{'opacity': reportForm.get('dateRange1').hasError('incorrect') ? '1' : '0'}">Maximum range value is
+        10.</small> -->
+    </div>
+    <!-- <div class="col-md-3">
+      <div class="subCatContainer">
+        <div class="custom-control custom-radio custom-control-inline">
+          <input type="radio" id="customRadioInline1" formControlName="subCat" class="custom-control-input" value="upi">
+          <label class="custom-control-label" for="customRadioInline1">UPI</label>
+        </div>
+      </div>
+    </div> -->
+    <div class="col-md-3">
+      <div class="form-group">
+        <label>Operation Performed: </label>
+        <select class="form-control" formControlName="operationPerformed">
+          <option value="all">All</option>
+          <option value="QR_COLLECT">QR Collect</option>
+          <option value="UPI_COLLECT">UPI Collect</option>
+          <option value="QR_STATIC">QR Static</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="form-group">
+        <label>Status: </label>
+        <select class="form-control" formControlName="status">
+          <option value="All">All</option>
+          <option value="INITIATED">INITIATED</option>
+          <option value="PENDING">PENDING</option>
+          <option value="SUCCESS">SUCCESS</option>
+          <option value="FAILED">FAILED</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-md-2 submitBtnCol">
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary" [disabled]="reportForm.invalid">Submit</button>
+      </div>
+    </div>
+  </div>
+</form>

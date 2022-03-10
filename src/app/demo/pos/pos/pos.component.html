@@ -1,0 +1,65 @@
+<div class="card cnt">
+<form [formGroup]="posForm" (submit)="submitPos()">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="subCat1">Report Type: </label>
+                <select class="form-control" id="posReport" formControlName="subCat1">
+                    <!-- <option value="DMT" id="customRadioInline4" class="custom-control-input">DMT REPORT</option> -->
+                    <option value="POS" id="customRadioInline5" class="custom-control-input">POS</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="dateRange">From Date :</label>
+                <div class="input-group">
+                    <div class="input-group-prepend"> <span class="input-group-text"> <i class="fa fa-calendar"></i>
+                        </span>
+                    </div>
+                    <input name="dateRange" [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="dateRange"
+                        class="form-control" [max]="today" [min]="minimumDate" readonly="true" placeholder="MM-DD-YYYY"
+                        (ngModelChange)="saverange($event)">
+                    <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <label for="dateRange">To Date :</label>
+            <div class="input-group">
+                <div class="input-group-prepend"> <span class="input-group-text"> <i class="fa fa-calendar"></i> </span>
+                </div>
+                <input name="dateRange" [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" formControlName="dateRange1"
+                    class="form-control" readonly="true" placeholder="MM-DD-YYYY">
+                <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+            </div>
+        </div>
+        <div class="col-md-3 submitBtnCol" style="padding: 28px 0 0 15px;">
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary"><i class="fa fa-search pr-1"></i> Search</button>
+            </div>
+        </div>
+    </div>
+</form>
+</div>
+<div class="card cnt">
+    <form action="" [formGroup]="searchForm" *ngIf="search_bar">
+        <div class="main_cnt">
+            <div class="input-group searchInput srh_width">
+                <input type="text" class="form-control form-controll" formControlName="search" placeholder="Search in Table"
+                    (keyup)="updateFilter($event)">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1"> <i class="feather icon-search"></i> </span>
+                </div>
+            </div>
+            <div class="total-records">
+                <span>Total Records:&nbsp; {{report_length}}/{{report_len}},&nbsp;</span>
+                <span>Total Amount: {{report_amount | currency:'INR'}}</span>
+            </div>
+            <div class="print_btn">
+                <button type="button" class="btn btn-primary" (click)="exportexcel()" [disabled]="!reports.length"><i class="fa fa-download"></i>
+                    Excel</button>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,60 @@
+<form [formGroup]="reportForm" (submit)="submitReport()">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="form-group">
+        <label for="dateRange">Select Range: </label>
+        <input name="dateRange" formControlName="dateRange" [owlDateTime]="dateRange"
+          placeholder="DD-MM-YYYY - DD-MM-YYYY" [owlDateTimeTrigger]="dateRange" class="form-control"
+          [selectMode]="'range'" [rangeSeparator]="' - '" [max]="today" [min]="minimumDate" readonly="true" />
+
+        <owl-date-time [firstDayOfWeek]="'1'" [pickerType]="'calendar'" #dateRange></owl-date-time>
+        <small class="form-text date-valid-message"
+          [ngStyle]="{'opacity': reportForm.get('dateRange').hasError('incorrect') ? '1' : '0'}">Maximum range value is
+          10.</small>
+      </div>
+    </div>
+    <div class="col-md-2 mb-sm-4">
+      <label>Select Sub-category: </label>
+      <div class="subCatContainer">
+        <div class="custom-control custom-radio custom-control-inline">
+          <input type="radio" id="customRadioInline1" formControlName="subCat" class="custom-control-input"
+            value="recharge">
+          <label class="custom-control-label" for="customRadioInline1">Recharge</label>
+        </div>
+        <div class="custom-control custom-radio custom-control-inline">
+          <input type="radio" id="customRadioInline2" formControlName="subCat" class="custom-control-input"
+            value="recharge_new">
+          <label class="custom-control-label" for="customRadioInline2">Recharge New</label>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-5 selectCol mb-sm-4">
+      <ng-container *ngIf="reportForm.get('subCat').value === 'recharge_new'">
+        <div class="form-group">
+          <label>Operation Performed: </label>
+          <select class="form-control" formControlName="operationPerformed">
+            <option disabled value="">Select</option>
+            <option value="Prepaid Recharge">Prepaid Recharge</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Status: </label>
+          <select class="form-control" formControlName="status">
+            <option disabled value="">Select</option>
+            <option value="All">All</option>
+            <option value="INITIATED">INITIATED</option>
+            <option value="PENDING">PENDING</option>
+            <option value="SUCCESS">SUCCESS</option>
+            <option value="REFUNDED">REFUNDED</option>
+            <option value="FAILED">FAILED</option>
+          </select>
+        </div>
+      </ng-container>
+    </div>
+    <div class="col-md-2 submitBtnCol">
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary" [disabled]="reportForm.invalid">Submit</button>
+      </div>
+    </div>
+  </div>
+</form>

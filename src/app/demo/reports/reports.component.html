@@ -1,0 +1,784 @@
+<!-- <p>Reports Component Works</p> -->
+<!--  ----------------------------------------------------------------------------------------  ------------------------------------------------------------------------------------------>
+
+<app-card [hidHeader]="true">
+	<div class="row">
+		<div class="col-md-12 order-md-2 order-1">
+			<ng-container [ngSwitch]="reportType">
+				<app-recharge-trans-report *ngSwitchCase="'recharge'" (rechargeData)="getFormData($event)">
+				</app-recharge-trans-report>
+				<app-dmt-trans-report *ngSwitchCase="'dmt'" (dmtData)="getFormData($event)"></app-dmt-trans-report>
+				<app-dmt2-form *ngSwitchCase="'dmt2'" (dmt2Data)="getFormData($event)"
+					[fetchingReport]="fetchingReport"></app-dmt2-form>
+				<app-aeps-trans-report *ngSwitchCase="'aeps'" (aepsData)="getFormData($event)"></app-aeps-trans-report>
+				<app-matm-trans-report *ngSwitchCase="'matm'" (matmData)="getFormData($event)"></app-matm-trans-report>
+				<app-bbps-trans-report *ngSwitchCase="'bbps'" (bbpsData)="getFormData($event)"></app-bbps-trans-report>
+				<app-ins-trans-report *ngSwitchCase="'insurance'" (insuranceData)="getFormData($event)">
+				</app-ins-trans-report>
+				<app-cashout-trans-report *ngSwitchCase="'cashout'" (cashoutData)="getFormData($event)">
+				</app-cashout-trans-report>
+				<app-comm-trans-report *ngSwitchCase="'commission'" (commissionData)="getFormData($event)"
+					[fetchingReport]="fetchingReport"></app-comm-trans-report>
+				<app-wallet-trans-report *ngSwitchCase="'wallet'" (walletData)="getFormData($event)"
+					[fetchingReport]="fetchingReport"></app-wallet-trans-report>
+				<app-upi-trans-report *ngSwitchCase="'upi'" (upiData)="getFormData($event)"></app-upi-trans-report>
+				<app-recharge-report *ngSwitchCase="'recharge2'" (recharge2Data)="getFormData($event)"
+					[fetchingReport]="fetchingReport"></app-recharge-report>
+				<p *ngSwitchDefault>Nothing Works!!</p>
+			</ng-container>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-right">
+
+		</div>
+	</div>
+</app-card>
+<!------------------------------------------------------------------------------------------  ------------------------------------------------------------------------------------------>
+<!-- <div class="d-flex justify-content-center" *ngIf="fetchingReport" @fadeSlideInOut>
+	<div class="spinner-border" style="width: 3rem; height: 3rem;" role="status"> <span class="sr-only">Loading...</span> </div>
+</div>
+<div class="dataTable" *ngIf="!fetchingReport && reports.length" @fadeSlideInOut> -->
+<div class="position-relative">
+
+	<div class="position-absolute" style="width: 100%;">
+
+		<div class="d-flex justify-content-center" *ngIf="fetchingReport" @fadeSlideInOut>
+			<div class="spinner-border" style="width: 3rem; height: 3rem;" role="status"> <span
+					class="sr-only">Loading...</span> </div>
+		</div>
+
+	</div>
+	<div class="position-absolute" style="width: 100%;">
+
+		<div class="dataTable" *ngIf="!fetchingReport" @fadeSlideInOut>
+			<div class="card">
+				<div class="card-body">
+					<div class="d-md-flex flex-row justify-content-between dtBtns pb-2">
+						<div class="input-group searchInput">
+							<div class="input-group-prepend"> <span class="input-group-text" id="basic-addon1"> <i
+										class="feather icon-search"></i> </span> </div>
+							<input type="text" class="form-control" placeholder="Search in Table" aria-label="Search"
+								aria-describedby="basic-addon1" (keyup)="updateFilter($event)"
+								[formControl]="searchInput">
+						</div>
+						<div class="total-records" style="padding: 10px 0;" *ngIf="(reportType == 'dmt2')">
+							<span>Total Records:&nbsp;{{totalpagecount}}</span>
+							<span>,&nbsp;&nbsp;Total Amount:&nbsp;{{total}}</span>
+						</div>
+						<div class="total-records" style="padding: 10px 0;" *ngIf="(reportType == 'cashout')">
+							<span>Total Records:&nbsp;{{totalpagecount}}</span>
+							<span>,&nbsp;&nbsp;Total Amount:&nbsp;{{total}}</span>
+						</div>
+						<div class="total-records" style="padding: 10px 0;" *ngIf="(reportType == 'commission')">
+							<span>Total Records:&nbsp;{{totalpagecount}}</span>
+							<span>,&nbsp;&nbsp;Total Amount:&nbsp;{{total}}</span>
+						</div>
+						<div class="total-records" style="padding: 10px 0;" *ngIf="(reportType == 'upi')">
+							<span>Total Records:&nbsp;{{totalpagecount}}</span>
+							<span>,&nbsp;&nbsp;Total Amount:&nbsp;{{total}}</span>
+						</div>
+						<div class="total-records" style="padding: 10px 0;" *ngIf="(reportType == 'recharge2')">
+							<span>Total Records:&nbsp;{{totalpagecount}}</span>
+							<span>,&nbsp;&nbsp;Total Amount:&nbsp;{{total}}</span>
+						</div>
+						<div class="total-records" style="padding: 10px 0;" *ngIf="(reportType == 'wallet')">
+							<span>Total Records:&nbsp;{{totalpagecount}}</span>
+							<span>,&nbsp;&nbsp;Total CR Amount:&nbsp;{{total_CR}}</span>
+							<span>,&nbsp;&nbsp;Total DR Amount:&nbsp;{{total_DR}}</span>
+						</div>
+						<div class="d-md-flex">
+							<div class="d-flex flex-row justify-content-end mr-1">
+								<div class="selCols mr-2">
+									<mat-form-field style="width: 100%;">
+										<mat-select (valueChange)="showCols($event)" multiple
+											[formControl]="selectiveCols">
+											<mat-option [value]="'all'">All</mat-option>
+											<mat-option *ngFor="let col of selCols" [value]="col.prop">{{col.prop}}
+											</mat-option>
+										</mat-select>
+									</mat-form-field>
+								</div>
+								<div class="expBtn" *ngIf="(reportType == 'dmt2')">
+									<button (click)="expndall = !expndall" class="btn btn-success">{{expndall ?
+										'Collapse' :
+										'Expand'}} All</button>
+								</div>
+							</div>
+							<div class="table-exc-print text-center">
+								<button type="button" class="btn btn-primary" (click)="downloadExcel()"
+									[attr.disabled]="reports.length ? null : 'disabled'"><i class="fa fa-download"></i>
+									Excel</button>
+							</div>
+						</div>
+					</div>
+					<div *ngIf="!fetchingReport && reports.length">
+						<ngx-datatable #table class="material" [headerHeight]="50" [footerHeight]="50" [limit]="50"
+							[rows]="reports" columnMode="force" [scrollbarH]="true" [columns]="tableCols"
+							[rowHeight]="50">
+							<!-- DatatTable Footer Starts -->
+							<ngx-datatable-footer>
+								<ng-template ngx-datatable-footer-template let-rowCount="rowCount"
+									let-pageSize="pageSize" let-selectedCount="selectedCount" let-curPage="curPage"
+									let-offset="offset" let-isVisible="isVisible">
+									<div class="countAlign">
+										<span>Total:&nbsp;{{rowCount}}</span>
+									</div>
+									<div class="page-limit-container">
+										<select (change)="onLimitChange($event.target.value)" class="form-control px-1">
+											<option *ngFor="let option of pageLimitOptions" [value]="option.value"
+												[selected]="option.value == currentPageLimit">
+												{{option.value}}
+											</option>
+										</select>
+									</div>
+
+									<datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'"
+										[pagerRightArrowIcon]="'datatable-icon-right'"
+										[pagerPreviousIcon]="'datatable-icon-prev'"
+										[pagerNextIcon]="'datatable-icon-skip'" [page]="curPage" [size]="pageSize"
+										[count]="rowCount" [hidden]="!((rowCount / pageSize) > 1)"
+										(change)="table.onFooterPage($event)">
+									</datatable-pager>
+								</ng-template>
+							</ngx-datatable-footer>
+							<!-- DatatTable Footer Ends -->
+						</ngx-datatable>
+					</div>
+					<!-- <ngx-datatable #table class="material" [headerHeight]="50" [footerHeight]="50" rowHeight="auto" [limit]="50" [rows]="reports" columnMode="force" [scrollbarH]="true" [columns]="tableCols" [rowHeight]="50"> </ngx-datatable> -->
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+</div>
+<ng-template #checkTemplate let-value="value">
+	<span *ngIf="['SUCCESS'].includes(value)" class="badge m-r-5 badge-pill badge-success">{{value}}</span>
+	<span *ngIf="['INPROGRESS', 'INITIATED' , 'REFUNDPENDING'].includes(value)"
+		class="badge m-r-5 badge-pill badge-warning">{{value}}</span>
+	<span *ngIf="value === 'REFUNDED'" class="badge m-r-5 badge-pill badge-info">{{value}}</span>
+	<span *ngIf="value === 'FAILED'" class="badge m-r-5 badge-pill badge-danger">{{value}}</span>
+	<span *ngIf="value === 'NA'" class="m-r-5">{{gatewaystatusname}}</span>
+</ng-template>
+<ng-template #gatewayTemplate let-value="value">
+	<table *ngIf="expndall">
+		<ng-container *ngIf="checkType(value) === 'object'">
+			<tr *ngFor="let trdata of value">
+				<td>{{trdata.amount}}</td>
+				<td>{{trdata.status}}</td>
+			</tr>
+		</ng-container>
+		<ng-container *ngIf="checkType(value) !== 'object'">
+			<tr>{{value}}</tr>
+		</ng-container>
+	</table>
+</ng-template>
+<!-- <ng-template #statusDescTemplate let-value="value">
+	<span>{{value}}</span>
+</ng-template> -->
+<ng-template #actionTemplate let-row="row" let-col="column">
+	<ng-container *ngIf="(reportType === 'dmt2')">
+		<ng-template #popContent>
+			<div class="mr-2" (click)="actionData(row)">Download</div>
+			<div class="mr-2" (click)="transDetail(row)">Detail</div>
+			<div *ngIf="(row.gatewayStatus === 'REFUNDPENDING')" class="mr-2" (click)="getRefunds(row)">Refund</div>
+			<!-- <div *ngIf="col.prop === 'retry'" (click)="showRetries(row)">Retry</div> -->
+			<div *ngIf="col.prop === 'refund'" (click)="showRefunds(row)">Refund</div>
+			<!-- <div *ngIf="col.prop === 'true'" (click)="showRetries(row)">Retry</div> -->
+		</ng-template>
+		<span [placement]="'left'" [ngbPopover]="popContent" class="cursor-pointer"> <i
+				class="feather icon-settings"></i> </span>
+	</ng-container>
+	<ng-container *ngIf="(reportType !== 'dmt2' && reportType !=='recharge2')">
+		<span class="cursor-pointer"> <i class="feather icon-settings"></i> </span>
+	</ng-container>
+</ng-template>
+
+<ng-template #dateTemplate let-value="value"> <span title="{{ value | date: 'medium' }}">{{ value | date: 'medium'
+		}}</span></ng-template>
+
+<ng-template *ngIf="(dmtreporttype == 'DMT')" #idTemplate let-value="value" let-row="row">
+	<span class="cursor-pointer" (click)="showGatewayData(row)"> <b>{{value}}</b> </span>
+</ng-template>
+
+<app-ui-modal #modalDefault [hideHeader]="true" dialogClass="modal-lg modal-dialog-centered modal-max-1200">
+
+	<div class="app-modal-body">
+
+		<div class="table-responsive">
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>TxnID</th>
+						<th>UserName</th>
+						<th>Account Number</th>
+						<th>BankName</th>
+						<th>IFSC</th>
+						<th>Customer MobileNumber</th>
+						<th>Gateway Amount</th>
+						<th>Gateway Id</th>
+						<th>Gateway Status</th>
+						<th>API Comment</th>
+						<th>RRN</th>
+						<th>Transacted BankName</th>
+						<th>CreatedDate</th>
+						<th>UpdatedDate</th>
+					</tr>
+				</thead>
+				<tbody>
+					<ng-container *ngIf="txnDetailReport.reports.length">
+						<tr *ngFor="let report of txnDetailReport.reports">
+							<td>{{report.txnID}}</td>
+							<td>{{report.username}}</td>
+							<td>{{report.beneAccountNumber}}</td>
+							<td>{{report.beneBankName}}</td>
+							<td>{{report.beneIfsc}}</td>
+							<td>{{report.customerMobileNumber}}</td>
+							<td>{{report.gatewayAmount}}</td>
+							<td>{{report.gatewayId}}</td>
+							<td>{{report.gatewayStatus}}</td>
+							<td>{{report.status_desc}}</td>
+							<td>{{report.rrn}}</td>
+							<td>{{report.transactedBankName}}</td>
+							<td>{{report.createdDate | date: 'medium'}}</td>
+							<td>{{report.updatedDate | date: 'medium'}}</td>
+						</tr>
+					</ng-container>
+					<ng-container *ngIf="!txnDetailReport.reports.length">
+						<tr>
+							<td colspan="10" class="text-center font-weight-bold"> No Records Found </td>
+						</tr>
+					</ng-container>
+				</tbody>
+			</table>
+		</div>
+
+		<div class="d-flex flex-column align-items-center justify-content-center">
+			<button type="button" class="btn btn-danger" (click)="modalDefault.hide()">Cancel</button>
+		</div>
+
+	</div>
+
+</app-ui-modal>
+
+<app-ui-modal #refundList1 dialogClass="modal-dialog-centered modal-max-1200" [hideHeader]="true">
+
+	<div class="app-modal-body">
+		<div class="d-flex justify-content-between mb-3">
+			<p class="retry-header">Refund Transactions</p>
+			<span class="btnModalClose cursor-pointer" aria-hidden="true" (click)="refundList1.hide()">&times;</span>
+		</div>
+
+		<div>
+			<div class="input-group searchInput">
+				<div class="input-group-prepend"> <span class="input-group-text" id="basic-addon1"> <i
+							class="feather icon-search"></i> </span> </div>
+				<input type="text" class="form-control" placeholder="Enter Transaction ID" aria-label="Search"
+					aria-describedby="basic-addon1" [formControl]="searchInput" (keyup)="searchRefundID($event)">
+			</div>
+		</div>
+
+		<div class="refund-list-container">
+
+
+			<div class="table-responsive">
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Amount</th>
+							<th>Status</th>
+							<th>Status Description</th>
+							<th>Account Number</th>
+							<th>Bank</th>
+							<th>IFSC</th>
+							<th>Created Date</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<ng-container *ngIf="refundData.refunds.length">
+							<tr *ngFor="let refund of refundData.refunds">
+								<td>{{refund.id}}</td>
+								<td>{{refund.amount | currency: 'INR'}}</td>
+								<td>{{refund.status}}</td>
+								<td>{{refund.statusDescription}}</td>
+								<td>{{refund.beneAccountNumber}}</td>
+								<td>{{refund.beneBankName}}</td>
+								<td>{{refund.beneIfsc}}</td>
+								<td>{{refund.createdDate | date: 'medium'}}</td>
+								<td><button type="button" class="btn btn-primary btn-block border-rad-5"
+										(click)="getRefundTxn(refund)">Refund</button></td>
+							</tr>
+						</ng-container>
+						<ng-container *ngIf="!refundData.refunds.length">
+							<tr>
+								<td colspan="9" class="text-center font-weight-bold"> No Records Found </td>
+							</tr>
+						</ng-container>
+					</tbody>
+				</table>
+			</div>
+
+		</div>
+	</div>
+
+</app-ui-modal>
+
+<app-ui-modal #modalRetry [hideHeader]="true" dialogClass="modal-dialog-centered modal-max-1200">
+	<div class="app-modal-body">
+		<div class="d-flex justify-content-between mb-3">
+			<p class="retry-header">Retry Transactions</p>
+			<span class="btnModalClose cursor-pointer" aria-hidden="true" (click)="retryModal.hide()">&times;</span>
+		</div>
+
+		<ng-container *ngIf="retryDataDMT2.retrying">
+			<div class="d-flex justify-content-center">
+				<div class="spinner-border" style="width: 3rem; height: 3rem;" role="status"> <span
+						class="sr-only">Loading...</span> </div>
+			</div>
+		</ng-container>
+		<ng-container *ngIf="!retryDataDMT2.retrying">
+
+			<div class="table-responsive">
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Amount</th>
+							<th>Status</th>
+							<th>Status Description</th>
+							<th>Account Number</th>
+							<th>Bank</th>
+							<th>IFSC</th>
+							<th>CREATED DATE</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<ng-container *ngIf="retryDataDMT2.transData?.gateWayData.length">
+							<tr *ngFor="let trans of retryDataDMT2.transData.gateWayData">
+								<td>{{trans.id}}</td>
+								<td>{{trans.amount | currency: 'INR'}}</td>
+								<td>{{trans.status}}</td>
+								<td>{{trans.status_desc}}</td>
+								<td>{{trans.bene_account_number}}</td>
+								<td>{{trans.bene_bank_name}}</td>
+								<td>{{trans.bene_ifsc}}</td>
+								<td>{{trans.created_date | date: 'medium'}}</td>
+								<td><button type="button" class="btn btn-primary btn-block border-rad-5"
+										(click)="connectThenRetry(trans.id)">Retry</button></td>
+							</tr>
+						</ng-container>
+						<ng-container *ngIf="!retryDataDMT2.transData?.gateWayData.length">
+							<tr>
+								<td colspan="2" class="text-center font-weight-bold"> No Records Found </td>
+							</tr>
+						</ng-container>
+					</tbody>
+				</table>
+			</div>
+
+		</ng-container>
+
+
+
+
+	</div>
+</app-ui-modal>
+
+<!-- TRANSACTION MODAL STARTS -->
+<app-ui-modal #modalSuccess [hideHeader]="true" dialogClass="modal-dialog-centered">
+	<div class="app-modal-body">
+		<div class="text-right">
+			<ng-container *ngIf="!socketData.socket_timeout">
+				<span class="cursor-pointer mr-2" (click)="generatePDF()">
+					<img src="assets/images/dmt/download.svg" width="32" />
+				</span>
+				<!-- <span class="cursor-pointer mr-2">
+				  <img src="assets/images/dmt/print.svg" width="32" />
+				</span> -->
+			</ng-container>
+			<!-- <span class="cursor-pointer mr-3">
+			<img src="assets/images/dmt/share.svg" width="32" />
+		  </span> -->
+			<button type="button" class="close basic-close position-static btnModalClose" data-dismiss="modal"
+				aria-label="Close" (click)="transModal.hide()">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+
+		<!-- Socket Timeout FALSE Starts -->
+		<ng-container *ngIf="!socketData.socket_timeout">
+
+			<!-- Money Transaction Performed Starts -->
+			<!-- <ng-container *ngIf="socketData.operation_performed !== 'FN_BENE_VERIFICATION'"> -->
+			<ng-container *ngIf="socketData.operation_performed !== 'BENE_VERIFICATION'">
+
+				<div class="text-center bank-image">
+
+					<span class="position-relative DMTStatusImg d-inline-block">
+						<!-- <i class="fas fa-university"></i> -->
+						<img src="assets/images/dmt/bank.svg" width="100" />
+						<ng-container [ngSwitch]="socketData.status">
+							<i *ngSwitchCase="'SUCCESS'" class="far fa-check-circle position-absolute transSuccess"></i>
+							<i *ngSwitchCase="'FAILED'" class="far fa-times-circle position-absolute text-danger"></i>
+							<i *ngSwitchCase="'INPROGRESS'"
+								class="fas fa-exclamation-circle position-absolute text-warning"></i>
+						</ng-container>
+					</span>
+					<div class="amount-section-popup mt-2">{{socketData.amount | currency: 'INR'}}</div>
+					<ng-container [ngSwitch]="socketData.status">
+						<div *ngSwitchCase="'SUCCESS'" class="mb-3 trans-subheading-popup transSuccess">Money Transfer
+							Successful</div>
+						<div *ngSwitchCase="'FAILED'" class="mb-3 trans-subheading-popup text-danger">Money Transfer
+							Failed</div>
+						<div *ngSwitchCase="'INPROGRESS'" class="mb-3 trans-subheading-popup text-warning">Money
+							Transfer is in Progress</div>
+					</ng-container>
+
+				</div>
+
+				<div class="container to-from">
+					<div class="row mb-2 px-1">
+						<div class="col-6 pl-1">
+							<div class="heading hdngborder">From</div>
+							<div class="from-name mt-2">{{socketData.customer_name}}</div>
+							<div>Mob No.: {{socketData.customer_mobile}}</div>
+						</div>
+						<div class="col-6 px-0">
+							<div class="heading hdngborder">To</div>
+							<div class="to-name mt-2">{{socketData.bene_name}}</div>
+							<div>A/C No.: {{socketData.bene_acc}}</div>
+							<div>Bank Name: {{socketData.bene_bank}}</div>
+							<div>IFSC: {{socketData.bene_ifsc}}</div>
+						</div>
+					</div>
+					<div class="row mb-2 px-1">
+						<div class="heading text-uppercase col px-1">Transaction Details</div>
+					</div>
+				</div>
+
+				<div class="trans-message-dmt">
+					<div class="trans-row">
+						<div class="trans-left">
+							Transaction ID:&nbsp;&nbsp;&nbsp;
+						</div>
+						<div class="trans-right">
+							{{socketData.id}}
+						</div>
+					</div>
+					<div class="trans-row">
+						<div class="trans-left">
+							Transaction Mode:&nbsp;&nbsp;&nbsp;
+						</div>
+						<div class="trans-right">
+							{{socketData.trans_mode}}
+						</div>
+					</div>
+					<div class="trans-row">
+						<div class="trans-left">
+							Details:&nbsp;&nbsp;&nbsp;
+						</div>
+						<div class="trans-right" *ngIf="socketData.status === 'SUCCESS'">
+							<div class="rrn-grid">
+								<span>RRN</span>
+								<span>Amount</span>
+								<span>Status</span>
+							</div>
+							<ng-container *ngFor="let data of socketData.rrn">
+								<div class="rrn-grid">
+									<span>{{ data.rrn }}</span>
+									<span>{{ data.amount | currency: 'INR' }}</span>
+									<span>{{ data.status }}</span>
+								</div>
+							</ng-container>
+						</div>
+						<div class="trans-right" *ngIf="socketData.status !== 'SUCCESS'">N/A</div>
+					</div>
+					<div class="trans-row">
+						<div class="trans-left">
+							Status:&nbsp;&nbsp;&nbsp;
+						</div>
+						<div class="trans-right">
+							{{socketData.status}}
+						</div>
+					</div>
+					<div class="trans-row">
+						<div class="trans-left">
+							Shop Name:&nbsp;&nbsp;&nbsp;
+						</div>
+						<div class="trans-right">
+							{{socketData.shop_name}}
+						</div>
+					</div>
+				</div>
+
+			</ng-container>
+			<!-- Money Transaction Performed Ends -->
+
+		</ng-container>
+		<!-- Socket Timeout FALSE Ends -->
+
+
+		<!-- Socket Timeout TRUE Starts -->
+		<ng-container *ngIf="socketData.socket_timeout">
+
+			<div class="text-center bank-image">
+
+				<span class="position-relative DMTStatusImg d-inline-block">
+					<img src="assets/images/dmt/bank.svg" width="100" />
+					<i class="fas fa-exclamation-circle position-absolute text-warning"></i>
+				</span>
+				<div class="amount-section-popup">{{socketData.amount | currency: 'INR'}}</div>
+				<div class="trans-subheading-popup text-warning">Your Money Transfer Is Being Processed!</div>
+
+			</div>
+
+			<div *ngIf="socketData.socket_timeout" class="text-center" style="margin: 12px 0;">
+				<div>Your transaction is being processed please check report after some time.</div>
+				<small>You will receive an SMS or Notification on completion of transaction.</small>
+			</div>
+
+			<div class="row trans-buttons mt-2 justify-content-center">
+				<div class="col-sm-4">
+					<button type="button" class="btn btn-danger btn-block" (click)="transModal.hide()">OK</button>
+				</div>
+			</div>
+
+		</ng-container>
+		<!-- Socket Timeout TRUE Ends -->
+
+	</div>
+</app-ui-modal>
+<!-- TRANSACTION MODAL ENDS -->
+
+<app-ui-modal #modalGateway [hideHeader]="true" dialogClass="modal-dialog-centered modal-max-900">
+	<div class="app-modal-body">
+		<div class="d-flex justify-content-between mb-3">
+			<p class="retry-header">Gateway Details</p>
+			<span class="btnModalClose cursor-pointer" aria-hidden="true" (click)="modalGateway.hide()">&times;</span>
+		</div>
+		<div class="table-responsive">
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>AMOUNT</th>
+						<th>RRN</th>
+						<th>STATUS</th>
+						<th>STATUS DESCRIPTION</th>
+						<th>BANK NAME</th>
+						<!-- <th>STATUS CODE</th> -->
+					</tr>
+				</thead>
+				<tbody>
+					<ng-container *ngIf="checkType(transRecord.gateWayData) === 'object'">
+						<tr *ngFor="let data of transRecord.gateWayData">
+							<td>{{data.id}}</td>
+							<td>{{data.amount}}</td>
+							<td>{{data.rrn}}</td>
+							<td>{{data.status}}</td>
+							<td>{{data.status_desc}}</td>
+							<td>{{data.transacted_bank_name}}</td>
+							<!-- <td>{{data.transaction_status_code}}</td> -->
+						</tr>
+					</ng-container>
+					<ng-container *ngIf="checkType(transRecord.gateWayData) !== 'object'">
+						<tr>
+							<td colspan="7" class="text-center font-weight-bold"> {{ transRecord.gateWayData }} </td>
+						</tr>
+					</ng-container>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</app-ui-modal>
+
+<!-- Refund List Modal Starts -->
+<app-ui-modal #refundList dialogClass="modal-dialog-centered modal-max-1200" [hideHeader]="true">
+
+	<div class="app-modal-body">
+		<div class="d-flex justify-content-between mb-3">
+			<p class="retry-header">Refund Transactions</p>
+			<span class="btnModalClose cursor-pointer" aria-hidden="true" (click)="refundList.hide()">&times;</span>
+		</div>
+		<div class="refund-list-container">
+
+
+			<!-- <div *ngIf="refundDataDMT2.transData">
+			  <div *ngFor="let trans of refundDataDMT2.transData.gateWayData" class="d-flex justify-content-between mb-2">
+				  <div>{{ trans.id }}</div>
+				  <div>{{ trans.amount | currency: 'INR' }}</div>
+				  <div>{{ trans.status }}</div>
+				  <div>{{ trans.status_desc }}</div>
+				  <div><button type="button" class="btn btn-primary btn-block border-rad-5" (click)="getRefundTxn(trans.id)">Refund</button></div>
+			  </div>
+		  </div> -->
+
+
+			<div class="table-responsive">
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Amount</th>
+							<th>Status</th>
+							<th>Status Description</th>
+							<th>Account Number</th>
+							<th>Bank</th>
+							<th>IFSC</th>
+							<th>Created Date</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<ng-container *ngIf="refundDataDMT2.transData">
+							<ng-container *ngIf="refundDataDMT2.transData.gateWayData.length">
+
+								<tr *ngFor="let trans of refundDataDMT2.transData.gateWayData">
+									<td>{{trans.id}}</td>
+									<td>{{trans.amount | currency: 'INR'}}</td>
+									<td>{{trans.status}}</td>
+									<td>{{trans.status_desc}}</td>
+									<td>{{trans.bene_account_number}}</td>
+									<td>{{trans.bene_bank_name}}</td>
+									<td>{{trans.bene_ifsc}}</td>
+									<td>{{trans.created_date | date: 'medium'}}</td>
+									<!-- <td><span class="cursor-pointer" (click)="getRefundTxn(refund.id)"> <i class="feather icon-settings"></i> </span></td> -->
+									<td><button type="button" class="btn btn-primary btn-block border-rad-5"
+											(click)="getRefundTxn(trans.id)">Refund</button></td>
+								</tr>
+
+							</ng-container>
+							<ng-container *ngIf="!refundDataDMT2.transData.gateWayData.length">
+								<tr>
+									<td colspan="2" class="text-center font-weight-bold"> No Records Found </td>
+								</tr>
+							</ng-container>
+						</ng-container>
+					</tbody>
+				</table>
+			</div>
+
+
+			<!-- <ng-container *ngIf="!refundDataDMT2.retrying">
+		</ng-container> -->
+
+			<!-- <div class="table-responsive">
+		  <table class="table table-bordered">
+			<thead>
+			<tr>
+			  <th>ID</th>
+			  <th>Action</th>
+			</tr>
+			</thead>
+			<tbody>
+			  <ng-container *ngIf="refundData.refunds.length">
+				<tr *ngFor="let refund of refundData.refunds">
+				  <td>{{refund.id}}</td>
+				  <td><span class="cursor-pointer" (click)="getRefundTxn(refund.id)"> <i class="feather icon-settings"></i> </span></td>
+				</tr>
+			  </ng-container>
+			  <ng-container *ngIf="!refundData.refunds.length">
+				<tr>
+				  <td colspan="2" class="text-center font-weight-bold"> No Records Found </td>
+				</tr>
+			  </ng-container>
+			</tbody>
+		  </table>
+		</div> -->
+
+		</div>
+	</div>
+
+</app-ui-modal>
+<!-- Refund List Modal Ends -->
+
+
+<app-ui-modal #refundOTP dialogClass="modal-dialog-centered" [hideHeader]="true">
+
+	<div class="app-modal-body">
+		<div class="d-flex justify-content-between mb-3">
+			<p class="retry-header">Verify OTP</p>
+			<span class="btnModalClose cursor-pointer" aria-hidden="true" (click)="refundOTP.hide()">&times;</span>
+		</div>
+
+		<div class="h-20">
+			<p class="text-center"
+				[ngClass]="{'text-danger': refundDataDMT2.otpStatus === -1, 'text-success': refundDataDMT2.otpStatus === 0}">
+				<b>{{refundDataDMT2.otpMessage}}</b>
+			</p>
+		</div>
+
+		<form [formGroup]="otpForm">
+			<div class="form-group">
+				<!-- <input validOTPField #digit1 type="text" formControlName="digit1" class="form-control" (input)="otpClick($event, '', digit2)">
+			<input validOTPField #digit2 type="text" formControlName="digit2" class="form-control" (input)="otpClick($event, digit1, digit3)">
+			<input validOTPField #digit3 type="text" formControlName="digit3" class="form-control" (input)="otpClick($event, digit2, digit4)">
+			<input validOTPField #digit4 type="text" formControlName="digit4" class="form-control" (input)="otpClick($event, digit3, digit5)">
+			<input validOTPField #digit5 type="text" formControlName="digit5" class="form-control" (input)="otpClick($event, digit4, digit6)">
+			<input validOTPField #digit6 type="text" formControlName="digit6" class="form-control" (input)="otpClick($event, digit5, '')"> -->
+				<input matInput validOTPField placeholder="Enter Otp" formControlName="otpfield">
+			</div>
+
+			<!-- <form [formGroup]="otpForm" class="px-5">
+			<div class="form-group otp-elements">
+				<input validOTPField #digit1 type="text" formControlName="digit1" class="form-control"
+					(input)="otpClick($event, '', digit2)">
+				<input validOTPField #digit2 type="text" formControlName="digit2" class="form-control"
+					(input)="otpClick($event, digit1, digit3)">
+				<input validOTPField #digit3 type="text" formControlName="digit3" class="form-control"
+					(input)="otpClick($event, digit2, digit4)">
+				<input validOTPField #digit4 type="text" formControlName="digit4" class="form-control"
+					(input)="otpClick($event, digit3, digit5)">
+				<input validOTPField #digit5 type="text" formControlName="digit5" class="form-control"
+					(input)="otpClick($event, digit4, digit6)">
+				<input validOTPField #digit6 type="text" formControlName="digit6" class="form-control"
+					(input)="otpClick($event, digit5, '')">
+			</div> -->
+		</form>
+
+		<div>
+			<div class="col-sm-12 d-flex justify-content-between">
+				<div class="resend-otp cursor-pointer"
+					[ngClass]="{'visible': !refundDataDMT2.showTimer, 'invisible': refundDataDMT2.showTimer}">
+					<p><span class="badge m-r-5 badge-pill badge-primary" (click)="resendRefundOTP()">Resend OTP</span>
+					</p>
+				</div>
+				<div class="resend-timer"
+					[ngClass]="{'visible': refundDataDMT2.showTimer, 'invisible': !refundDataDMT2.showTimer}">
+					<countdown #otpCd [config]="{leftTime: 5, demand: true}" (event)="handleEvent($event)"></countdown>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="text-right">
+			<button type="button" class="btn btn-primary border-rad-5" (click)="verifyRefundOTP()">Verify</button>
+		</div>
+		<div class="col-sm-12 d-flex justify-content-end">
+			<div class="lost">
+				<p>If you lost your Mobile </p><span style="color: blue; font-size:larger ;cursor: pointer;"
+					(click)="lostmob()">Click Here</span>
+			</div>
+		</div>
+	</div>
+</app-ui-modal>
+
+<ngx-spinner name="senderSpinner1">
+	<p style="color: white; margin-top: 50px;"> Loading... </p>
+</ngx-spinner>
+<ngx-spinner name="reportSpinner">
+	<p style="color: white; margin-top: 50px;"> Fetching Transaction Details... </p>
+</ngx-spinner>
+<ngx-spinner name="refundResendSpinner">
+	<p style="color: white; margin-top: 50px;"> Resending OTP... </p>
+</ngx-spinner>
+<ngx-spinner name="verifyRefundOTPSpinner">
+	<p style="color: white; margin-top: 50px;"> Verifying OTP... </p>
+</ngx-spinner>
+<ngx-spinner name="refundSpinner">
+	<p style="color: white; margin-top: 50px;"> Fetching Refund Transactions... </p>
+</ngx-spinner>

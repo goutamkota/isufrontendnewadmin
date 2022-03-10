@@ -1,0 +1,85 @@
+
+:host ::ng-deep {
+    .card {
+      border-radius: 10px;
+    }
+}
+
+.add-balance-functionality-container {
+    width: 50%;
+    margin: 0 auto;
+
+    .form-group {
+        .form-control {
+            border-radius: .5rem;
+        }
+    }
+}
+.trans-details {
+    .trans-message-dmt {
+      .trans-row {
+        background: #ffffffa8;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        padding: 9px;
+  
+        .trans-left {
+          font-weight: bold;
+          font-size: 90%;
+        }
+      }
+    }
+  }
+  div.app-modal-body {
+    background: url('/assets/images/dmt/popupbackground.png') no-repeat left top / cover;
+  }
+  .app-modal-body {
+    .trans-message-dmt {
+      border: 1px solid #68a9a9;
+  
+      .trans-row {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        border-bottom: 1px solid #68a9a9;
+        padding: 9px;
+  
+        .trans-left {
+          font-weight: bold;
+        }
+      }
+  
+      .trans-row:last-child {
+        border-bottom: none;
+      }
+    }
+  
+    .rrn-grid {
+      display: grid;
+      grid-template-columns: 2fr 2fr 2fr 3fr;
+    }
+  }
+
+.balance-type-selection-container {
+    .balance-type-wrapper {
+        .custom-control {
+            margin-right: 1rem;
+        }
+    }
+}
+
+.add-balance-btn-container {
+    margin-top: 2rem;
+
+    button {
+        margin-left: 10px;
+        border-radius: 5px;
+        width: 100px;
+    }
+}
+
+.user-autocomplete {
+    .searching {
+        right: 0;
+        font-size: .8rem;
+    }
+}

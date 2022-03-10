@@ -1,0 +1,30 @@
+.prb-modal{
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .trans-bg{
+        position: absolute;
+        z-index: 0;
+        left: 0; top: 0; right: 0;bottom: 0;
+        background-color: #0005;
+    }
+    .card{
+        padding: 15px;
+        position: relative;
+        z-index: 1;
+        min-width: 300px;
+        width: 600px;
+        max-width: 100%;
+        .card-head {
+            font-size: 16px;
+            border-bottom: 1px solid #ccc;
+            margin-bottom: 15px;
+        }
+    }
+}

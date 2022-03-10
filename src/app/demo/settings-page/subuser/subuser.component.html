@@ -1,0 +1,125 @@
+<div class="card switch_cnt">
+    <div class="switch_topbar">
+        <button class="btn btn-primary waveEfct back" [routerLink]="['/v1/settings']"><i
+                class="fas fa-caret-left"></i>&nbsp;&nbsp;Back</button>
+        <div class="switch_title">Assign Role</div>
+        <button border="none" class=" btn minimize" (click)="minimize()"><i class="far fa-window-minimize"></i></button>
+    </div>
+
+    <form [formGroup]="subuserForm">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="subusercat">Select SubUser:</label>
+                <select class="form-control" id="subusercat" formControlName="subCat">
+                    <option value="selectuser">Select User</option>
+
+                </select>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <button type="button" class="btn btn-primary">Assign</button>
+            </div>
+        </div>
+    </form>
+
+    <table class="switch_box" border="1px" style="width: 98%;text-align: center;" *ngIf='show'>
+        <tr style="height: 50px;">
+            <th style="text-align: center;">Subuser</th>
+            <th style="text-align: center;">Type</th>
+            <!-- <th style="text-align: right;">
+                    <button class="btn btn-primary waveEfct" (click)="save_all()" id="save_button" style="cursor: not-allowed; height: 50px;" disabled><i class="fas fa-save"></i>&nbsp;&nbsp; Save</button>
+                </th> -->
+        </tr>
+        <tr>
+            <td>sagarikas</td>
+            <td>Onboarding</td>
+        </tr>
+        <tr>
+            <td>Gurav</td>
+            <td>Account</td>
+        </tr>
+        <tr>
+            <td>Naushinatest1</td>
+            <td>Onboarding</td>
+        </tr>
+        <tr>
+            <td>SAGA</td>
+            <td>Support</td>
+        </tr>
+        <tr>
+            <td>SoumyaTest</td>
+            <td>N/A</td>
+        </tr>
+        <tr>
+            <td>Sripati</td>
+            <td>Onboarding</td>
+        </tr>
+        <tr>
+            <td>bhagiratha</td>
+            <td>Onboarding</td>
+        </tr>
+        <tr>
+            <td>chinmaya</td>
+            <td>Account</td>
+        </tr>
+        <tr>
+            <td>dharmendra</td>
+            <td>Account</td>
+        </tr>
+        <tr>
+            <td>manoj</td>
+            <td>Support</td>
+        </tr>
+        <tr>
+            <td>sagarika123</td>
+            <td>Support</td>
+        </tr>
+        <tr>
+            <td>sagarika12345</td>
+            <td>Support</td>
+        </tr>
+        <tr>
+            <td>sagarika996</td>
+            <td>Onboarding</td>
+        </tr>
+        <tr>
+            <td>sagarikatest</td>
+            <td>Onboarding</td>
+        </tr>
+        <tr>
+            <td>shital</td>
+            <td>Support</td>
+        </tr>
+        <tr>
+            <td>somya</td>
+            <td>Account</td>
+        </tr>
+        <tr>
+            <td>somya123</td>
+            <td>Support</td>
+        </tr>
+        <tr>
+            <td>somya1234</td>
+            <td>Support</td>
+        </tr>
+        <tr>
+            <td>soumya99</td>
+            <td>Onboarding</td>
+        </tr>
+        <tr>
+            <td>sripatiTest</td>
+            <td>Account</td>
+        </tr>
+        <tr>
+            <td>testUser1234</td>
+            <td>N/A</td>
+        </tr>
+        <tr>
+            <td>testsub</td>
+            <td>Onboarding</td>
+        </tr>
+            
+    </table>
+
+</div>

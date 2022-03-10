@@ -1,0 +1,365 @@
+<div class="add-balance-container">
+
+    <div class="balance-type-selection-container">
+        <app-card [hidHeader]="true">
+            <div class="balance-type-selection-label text-center">
+                <p><b>Select Transfer Type:</b></p>
+            </div>
+            <div class="d-flex justify-content-center balance-type-wrapper">
+                <div class="custom-control custom-radio">
+                    <input type="radio" id="addVirtualBalance" name="customRadio" class="custom-control-input" [formControl]="selectBalanceForm" value="addVirtBal">
+                    <label class="custom-control-label" for="addVirtualBalance">Add Virtual Balance</label>
+                </div>
+                <div class="custom-control custom-radio">
+                    <input type="radio" id="transferVirtualBalance" name="customRadio" class="custom-control-input" [formControl]="selectBalanceForm" value="transVirtBal">
+                    <label class="custom-control-label" for="transferVirtualBalance">Transfer Virtual Balance</label>
+                </div>
+            </div>
+        </app-card>
+    </div>
+
+    <div class="add-balance-functionality-container">
+
+        <app-card [hidHeader]="true">
+            <div class="row">
+                <div class="col-sm-12">
+                    <form [formGroup]="addBalanceForm" >
+
+                        <ng-container *ngIf="selectBalanceForm.value === 'transVirtBal'">
+                            <div class="form-group user-autocomplete position-relative">
+                                <label for="user"><b>Select User:</b> </label>
+                                <input name="user" formControlName="user" class="form-control" [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter"/>
+                                <small *ngIf="searching" class="form-text text-muted position-absolute searching">
+                                    <span class="badge m-r-5 badge-pill badge-primary">Searching...</span>
+                                </small>
+                                <div *ngIf="searchFailed" class="invalid-feedback">Sorry, suggestions could not be loaded.</div>
+                                <ng-template #rt let-r="result" let-t="term">
+                                    <div class="text-truncate">{{ r.userName }} / {{ r.name }} / {{ r.mobile }}</div>
+                                </ng-template>
+                            </div>
+                        </ng-container>
+        
+                        <div class="form-group">
+                            <label for="amount"><b>Amount:</b> </label>
+                            <input validAmountWithDecimal name="amount" formControlName="amount" class="form-control"/>
+                        </div>
+        
+                        <div class="form-group">
+                            <label for="remarks"><b>Comment:</b> </label>
+                            <input name="remarks" formControlName="remarks" class="form-control"/>
+                        </div>
+        
+                        <div class="form-group d-flex justify-content-end add-balance-btn-container" [ngClass]="{'justify-content-between': (selectBalanceForm.value === 'transVirtBal') && selectedUser}">
+                            <ng-container *ngIf="selectBalanceForm.value === 'transVirtBal'">
+                                <!-- <div class="user-details-container" *ngIf="selectedUser">
+                                    <p>User Name: <b>{{ selectedUser.userName }}</b></p>
+                                    <p>Shop Name: </p>
+                                    <p>Name: <b>{{ selectedUser.name }}</b></p>
+                                    <p>Mobile No.: <b>{{ selectedUser.mobile }}</b></p>
+                                </div> -->
+                                <div class="transfer-balance-btn-container">
+                                    <button type="submit" class="btn btn-primary" (click)="transdebit();" [disabled]="addBalanceForm.invalid">Debit</button>
+                                </div>
+                                <div class="transfer-balance-btn-container">
+                                    <button type="submit" class="btn btn-primary"  (click)="transcredit();" [disabled]="addBalanceForm.invalid">Pay</button>
+                                </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="selectBalanceForm.value === 'addVirtBal'">
+                                <button type="submit" class="btn btn-primary" (click)="transpay();" [disabled]="addBalanceForm.invalid" >Submit</button>
+                                <button type="button" class="btn btn-danger" (click)="addBalanceForm.reset()">Reset</button>
+                            </ng-container>
+                        </div>
+        
+                    </form>
+                </div>
+            </div>            
+        </app-card>
+        
+    </div>
+
+</div>
+<app-ui-modal #confirmmodalpay [hideHeader]="true" dialogClass="modal-dialog-centered">
+    <div class="app-modal-body">
+      <div class="text-right">
+        <!-- <ng-container *ngIf="(socketData.operation_performed === 'FN_FUND_TRANSFER') && (!socketData.socket_timeout)"> -->
+        <button type="button" class="close basic-close position-static btnModalClose img-radius" data-dismiss="modal"
+          aria-label="Close" (click)="hideconfirmmodal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <ng-container>
+  
+          <div class="row trans-details"> 
+  
+          <div class="col-12">
+            <div class="pay-confirm-header txt-white">Customer Details</div>
+          </div>
+  
+          <div class="col-12">
+  
+            <div class="trans-message-dmt">
+              <div class="trans-row">
+                <div class="trans-left">
+                  User Name:&nbsp;&nbsp;&nbsp;
+                </div>
+                <div class="trans-right">
+                  {{ transferData.customerData.name }}
+                </div>
+              </div>
+            </div>
+  
+          </div>
+  
+          <div class="col-12">
+            <div class="pay-confirm-header txt-white"> User Details</div>
+          </div>
+  
+          <div class="col-12">
+  
+            <div class="trans-message-dmt">
+              <div class="trans-row">
+                <div class="trans-left">
+                    User Name:&nbsp;&nbsp;&nbsp;
+                </div>
+                <div class="trans-right">
+                  {{ transferData.beneData.name }}
+                </div>
+              </div>
+              <div class="trans-row">
+                <div class="trans-left">
+                  Mobile Number:&nbsp;&nbsp;&nbsp;
+                </div>
+                <div class="trans-right">
+                  {{ transferData.customerData.mobileNumber }}
+                </div>
+              </div>
+            </div>  
+          </div>
+  
+          <div class="col-12">
+  
+            <div class="trans-message-dmt pay-confirm-header">
+              <div class="trans-row">
+                <div class="trans-left">
+                  Transfer Date:&nbsp;&nbsp;&nbsp;
+                </div>
+                <div class="trans-right">
+                  {{ transferData.date | date: 'dd MMM yyyy' }}
+                </div>
+              </div>
+              <div class="trans-row">
+                <div class="trans-left">
+                  Transfer Amount:&nbsp;&nbsp;&nbsp;
+                </div>
+                <div class="trans-right">
+                  {{ transferData.amount | currency: 'INR' }}
+                </div>
+                <div class="trans-left">
+                  &nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+                <div class="trans-right" style="font-size: 14px;">
+                  {{ toupper }}
+                </div>
+              </div>
+            </div>
+  
+          </div>
+  
+          <div class="col-12">
+  
+            <div class="row mt-3">
+  
+              <div class="col-6">
+                <button type="button" class="btn btn-primary btn-block border-rad-5"
+                  (click)="hideconfirmmodal()">Edit</button>
+              </div>
+              <div class="col-6">
+                <button type="button" class="btn btn-primary btn-block border-rad-5"
+                  (click)="connectThenTransfer()">Confirm</button>
+              </div>
+  
+            </div>
+          </div>
+  
+        </div>
+  
+      </ng-container>
+  
+    </div>
+  </app-ui-modal>
+  <app-ui-modal #confirmmodalpay1 [hideHeader]="true" dialogClass="modal-dialog-centered">
+    <div class="app-modal-body">
+      <div class="text-right">
+        <!-- <ng-container *ngIf="(socketData.operation_performed === 'FN_FUND_TRANSFER') && (!socketData.socket_timeout)"> -->
+        <button type="button" class="close basic-close position-static btnModalClose img-radius" data-dismiss="modal"
+          aria-label="Close" (click)="hideconfirmmodal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <ng-container>
+  
+          <div class="row trans-details"> 
+  
+          <div class="col-12">
+            <div class="pay-confirm-header txt-white">Customer Details</div>
+          </div>
+  
+          <div class="col-12">
+  
+            <div class="trans-message-dmt">
+              <div class="trans-row">
+                <div class="trans-left">
+                  User Name:&nbsp;&nbsp;&nbsp;
+                </div>
+                <div class="trans-right">
+                  {{ transferData.customerData.name }}
+                </div>
+              </div>
+            </div>
+  
+          </div>
+  
+          <div class="col-12">
+            <div class="pay-confirm-header txt-white"> User Details</div>
+          </div>
+  
+          <div class="col-12">
+  
+            <div class="trans-message-dmt">
+              <div class="trans-row">
+                <div class="trans-left">
+                    User Name:&nbsp;&nbsp;&nbsp;
+                </div>
+                <div class="trans-right">
+                  {{ transferData.beneData.name }}
+                </div>
+              </div>
+              <div class="trans-row">
+                <div class="trans-left">
+                  Mobile Number:&nbsp;&nbsp;&nbsp;
+                </div>
+                <div class="trans-right">
+                  {{ transferData.customerData.mobileNumber }}
+                </div>
+              </div>
+            </div>  
+          </div>
+  
+          <div class="col-12">
+  
+            <div class="trans-message-dmt pay-confirm-header">
+              <div class="trans-row">
+                <div class="trans-left">
+                  Transfer Date:&nbsp;&nbsp;&nbsp;
+                </div>
+                <div class="trans-right">
+                  {{ transferData.date | date: 'dd MMM yyyy' }}
+                </div>
+              </div>
+              <div class="trans-row">
+                <div class="trans-left">
+                  Transfer Amount:&nbsp;&nbsp;&nbsp;
+                </div>
+                <div class="trans-right">
+                  {{ transferData.amount | currency: 'INR' }}
+                </div>
+                <div class="trans-left">
+                  &nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+                <div class="trans-right" style="font-size: 14px;">
+                  {{ toupper }}
+                </div>
+              </div>
+            </div>
+  
+          </div>
+  
+          <div class="col-12">
+  
+            <div class="row mt-3">
+  
+              <div class="col-6">
+                <button type="button" class="btn btn-primary btn-block border-rad-5"
+                  (click)="hideconfirmmodal()">Edit</button>
+              </div>
+              <div class="col-6">
+                <button type="button" class="btn btn-primary btn-block border-rad-5"
+                  (click)="connectThenTransfer1()">Confirm</button>
+              </div>
+  
+            </div>
+          </div>
+  
+        </div>
+  
+      </ng-container>
+  
+    </div>
+  </app-ui-modal>
+  <app-ui-modal #confirmmodalpay2 [hideHeader]="true" dialogClass="modal-dialog-centered">
+    <div class="app-modal-body">
+      <div class="text-right">
+        <!-- <ng-container *ngIf="(socketData.operation_performed === 'FN_FUND_TRANSFER') && (!socketData.socket_timeout)"> -->
+        <button type="button" class="close basic-close position-static btnModalClose img-radius" data-dismiss="modal"
+          aria-label="Close" (click)="hideconfirmmodal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <ng-container>
+  
+          <div class="row trans-details"> 
+  
+          <div class="col-12">
+  
+            <div class="trans-message-dmt pay-confirm-header">
+              <div class="trans-row">
+                <div class="trans-left">
+                  Transfer Date:&nbsp;&nbsp;&nbsp;
+                </div>
+                <div class="trans-right">
+                  {{ transferData.date | date: 'dd MMM yyyy' }}
+                </div>
+              </div>
+              <div class="trans-row">
+                <div class="trans-left">
+                  Transfer Amount:&nbsp;&nbsp;&nbsp;
+                </div>
+                <div class="trans-right">
+                  {{ transferData.amount | currency: 'INR' }}
+                </div>
+                <div class="trans-left">
+                  &nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+                <div class="trans-right" style="font-size: 14px;">
+                  {{ toupper }}
+                </div>
+              </div>
+            </div>
+  
+          </div>
+  
+          <div class="col-12">
+  
+            <div class="row mt-3">
+  
+              <div class="col-6">
+                <button type="button" class="btn btn-primary btn-block border-rad-5"
+                  (click)="hideconfirmmodal()">Edit</button>
+              </div>
+              <div class="col-6">
+                <button type="button" class="btn btn-primary btn-block border-rad-5"
+                  (click)="connectThenTransfer2()">Confirm</button>
+              </div>
+  
+            </div>
+          </div>
+  
+        </div>
+  
+      </ng-container>
+  
+    </div>
+  </app-ui-modal>
+<ngx-spinner name="balanceSpinner"><p style="color: white; margin-top: 50px;" > Adding Balance... </p></ngx-spinner>
+<ngx-spinner name="balanceTransferSpinner"><p style="color: white; margin-top: 50px;" > Transferring Balance... </p></ngx-spinner>

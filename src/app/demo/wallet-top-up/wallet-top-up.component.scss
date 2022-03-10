@@ -1,0 +1,108 @@
+:host ::ng-deep {
+    .card {
+      border-radius: 10px;
+    }
+
+    .ngx-datatable.material .datatable-header .datatable-header-cell {
+      text-transform: capitalize;
+      background-color: #4680ff;
+      color: #fff;
+    }
+
+    .ngx-datatable {
+      border-radius: 15px;
+    }
+}
+
+.action-container {
+  display: flex;
+  align-items: center;
+
+  i {
+    margin-right: 10px;
+    cursor: pointer;
+
+    &:hover {
+      color: #4680ff;
+    }
+  }
+
+  svg {
+    height: 24px;
+    cursor: pointer;
+
+    &:hover {
+      fill: #4680ff;
+    }
+  }
+
+}
+
+.bank-table-filters {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+  margin-left: 10px;
+
+  button {
+    border-radius: 1rem;
+  }
+}
+
+.add-bank-submit-btn-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+
+  button {
+    width: 10rem;
+    border-radius: .5rem;
+  }
+}
+
+.add-bank-form {
+  input, select {
+    min-height: 3rem;
+    border-radius: .5rem;
+  }
+}
+
+.allowed-formats-list{
+  display: flex;
+
+  li {
+    margin-right: 2rem;
+    font-weight: bold;
+  }
+}
+
+.note {
+  margin-top: 1rem;
+  
+  b {
+    border: 1px solid;
+    border-radius: 1rem;
+    padding: 0 5px;
+  }
+}
+
+.image-container {
+  display: flex;
+  justify-content: center;
+
+  img {
+    width: 50%;
+  }
+}
+
+.bank-list {
+  z-index: 9;
+  border: 1px solid #dddddd;
+  border-radius: 5px;
+  max-height: 20rem;
+  overflow-y: auto;
+
+  li {
+    cursor: pointer;
+  }
+}

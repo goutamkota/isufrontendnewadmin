@@ -1,0 +1,154 @@
+<form [formGroup]="reportForm" (submit)="submitReport()">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="form-group">
+        <label for="subCat1">Report Type: </label>
+        <select class="form-control" id="dmtReport" formControlName="subCat1">
+          <!-- <option value="DMT" id="customRadioInline4" class="custom-control-input">DMT REPORT</option> -->
+          <option value="DMTG" id="customRadioInline5" class="custom-control-input">DMT GATE-WAY REPORT</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="form-group">
+        <label for="dateRange">From Date :</label>
+        <div class="input-group">
+          <div class="input-group-prepend"> <span class="input-group-text"> <i class="fa fa-calendar"></i> </span>
+          </div>
+          <input name="dateRange" [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="dateRange"
+            class="form-control" [max]="today" [min]="minimumDate" readonly="true" placeholder="MM-DD-YYYY"
+            (ngModelChange)="saverange($event)">
+          <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+        </div>
+
+        <!-- <small class="form-text date-valid-message"
+          [ngStyle]="{'opacity': reportForm.get('dateRange').hasError('incorrect') ? '1' : '0'}">Maximum range value is
+          10.</small> -->
+
+        <!-- <label for="dateRange">Select Range: </label>
+          <input name="dateRange" formControlName="dateRange" [owlDateTime]="dateRange"
+            placeholder="DD-MM-YYYY - DD-MM-YYYY" [owlDateTimeTrigger]="dateRange" class="form-control"
+            [selectMode]="'range'" [rangeSeparator]="' - '" [max]="today" [min]="minimumDate" readonly="true" />
+  
+          <owl-date-time [firstDayOfWeek]="'1'" [pickerType]="'calendar'" #dateRange></owl-date-time>
+          <small class="form-text date-valid-message"
+            [ngStyle]="{'opacity': reportForm.get('dateRange').hasError('incorrect') ? '1' : '0'}">Maximum range value is
+            10.</small> -->
+        <!-- <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Choose a date</mat-label>
+              <input matInput [min]="minimumDate" name="dateRange"  [max]="today" formControlName="dateRange" class="form-control" [matDatepicker]="picker">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field> -->
+        <!-- <input type="date" class="form-control" formControlName="fromdate" id="date-picker"
+                            placeholder="Select Date" (click)="limitDate()" max="today" min="minimumDate"> -->
+      </div>
+    </div>
+    <div class="col-md-3">
+      <label for="dateRange">To Date :</label>
+      <div class="input-group">
+        <div class="input-group-prepend"> <span class="input-group-text"> <i class="fa fa-calendar"></i> </span> </div>
+        <input name="dateRange" [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" formControlName="dateRange1"
+          class="form-control" [max]="somedate1" [min]="minimumDate1" readonly="true" placeholder="MM-DD-YYYY">
+        <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+      </div>
+      <!-- <small class="form-text date-valid-message"
+           [ngStyle]="{'opacity': reportForm.get('dateRange1').hasError('incorrect') ? '1' : '0'}">Maximum range value is
+           10.</small> -->
+    </div>
+    <div class="col-md-3">
+      <div class="form-group">
+        <label for="dmtSubCat">Transaction Status: </label>
+        <select class="form-control" id="dmtSubCat" formControlName="subCat">
+          <option value="ALL">ALL</option>
+          <option value="INITIATED">INITIATED</option>
+          <option value="INPROGRESS">IN PROGRESS</option>
+          <option value="SUCCESS">SUCCESS</option>
+          <option value="FAILED">FAILED</option>
+          <!-- <option value="RETRY">RETRY</option> -->
+          <option value="REFUNDED">REFUNDED</option>
+          <option value="REFUNDPENDING">REFUND PENDING</option>
+        </select>
+      </div>
+    </div>
+    <!-- <div class="col-md-4">
+        <div class="form-group">\7
+          <div><label for="dmtSubCat1">Report Type: </label></div>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="customRadioInline4" formControlName="subCat1" class="custom-control-input"
+              value="DMTG">
+            <label class="custom-control-label" for="customRadioInline4">DMT GATE-WAY REPORT</label>
+          </div>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="customRadioInline3" formControlName="subCat1" class="custom-control-input"
+              value="DMT">
+            <label class="custom-control-label" for="customRadioInline3">DMT REPORT</label>
+          </div>
+        </div>
+      </div> -->
+
+    <div class="col-md-3" *ngIf="(reportForm.get('subCat1').value === 'DMTG') && adv_search">
+      <div class="form-group">
+        <div style="padding-bottom: 5px;" *ngIf="adv_search"><label for="dmtSearchBy">Search By: </label></div>
+        <div class="custom-control custom-radio custom-control-inline">
+          <input type="radio" id="searchBy1" formControlName="searchBy" name="searchBy" class="custom-control-input"
+            value="TXNID" (click)="searchByVal('txnid')" checked>
+          <label class="custom-control-label" for="searchBy1" style="padding-top: 2px;">TXNID</label>
+        </div>
+        <div class="custom-control custom-radio custom-control-inline" *ngIf="adv_search">
+          <input type="radio" validMobile id="searchBy2" formControlName="searchBy" name="searchBy"
+            class="custom-control-input" value="MOBILE" (click)="searchByVal('mobile')">
+          <label class="custom-control-label" for="searchBy2" style="padding-top: 2px;">MOBILE</label>
+        </div>
+        <div class="custom-control custom-radio custom-control-inline" *ngIf="adv_search">
+          <input type="radio" validAccNum id="searchBy3" formControlName="searchBy" name="searchBy"
+            class="custom-control-input" value="ACCNO" (click)="searchByVal('accno')">
+          <label class="custom-control-label" for="searchBy3" style="padding-top: 2px;">ACCNO</label>
+        </div>
+        <div class="custom-control custom-radio custom-control-inline" *ngIf="adv_search">
+          <input type="radio" validAccNum id="searchBy4" formControlName="searchBy" name="searchBy"
+            class="custom-control-input" value="RRN" (click)="searchByVal('RRN')">
+          <label class="custom-control-label" for="searchBy4" style="padding-top: 2px;">RRN</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3" *ngIf="(sval == 'mobile'  && adv_search)&& (reportForm.get('subCat1').value === 'DMTG')">
+      <label for="mobile">Enter Mobile:</label>
+      <div class="input-group" *ngIf="adv_search">
+        <input type="tel" name="mobile" formControlName="mobile" class="form-control" placeholder="Enter Mobile Number">
+      </div>
+    </div>
+
+    <div class="col-md-3" *ngIf="(sval == 'accno'  && adv_search) && (reportForm.get('subCat1').value === 'DMTG')">
+      <label for="ACCNO">Enter Acc No:</label>
+      <div class="input-group">
+        <input type="text" name="accno" formControlName="accno" class="form-control" placeholder="Enter Account Number">
+      </div>
+    </div>
+
+    <div class="col-md-3" *ngIf="(sval == 'txnid' && adv_search) && (reportForm.get('subCat1').value === 'DMTG')">
+      <label for="txnID">Enter TXNID:</label>
+      <div class="input-group">
+        <input name="txnID" formControlName="txnID" class="form-control" placeholder="Enter txnID">
+      </div>
+    </div>
+    <div class="col-md-3" *ngIf="(sval == 'RRN' && adv_search) && (reportForm.get('subCat1').value === 'DMTG')">
+      <label for="RRN">Enter RRN:</label>
+      <div class="input-group">
+        <input name="RRN" formControlName="RRN" class="form-control" placeholder="Enter RRN">
+      </div>
+    </div>
+
+    <div class="col-md-4 submitBtnCol float-right" style="padding: 28px 0 0 15px;">
+      <div class="form-group">
+        <button *ngIf="!fetchingReport && !reportForm.invalid" type="submit" class="btn btn-primary"><i
+            class="fa fa-search"></i> Search</button>
+        <button *ngIf="fetchingReport || reportForm.invalid" type="button" class="btn btn-primary" disabled><i
+            class="fa fa-search"></i> Search</button>
+        <button *ngIf="(reportForm.get('subCat1').value === 'DMTG')" type="button" class="btn ml-1 btn-outline-primary"
+          (click)="adv_search = !adv_search"> <i class="fa fa-filter"></i> Advance Search</button>
+      </div>
+    </div>
+  </div>
+</form>

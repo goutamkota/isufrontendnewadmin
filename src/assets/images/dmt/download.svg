@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+  <g id="download" transform="translate(-579 -685)">
+    <g id="Ellipse_15" data-name="Ellipse 15" transform="translate(579 685)" fill="#1ebdbf" stroke="#1ebdbf" stroke-width="2">
+      <circle cx="24" cy="24" r="24" stroke="none"/>
+      <circle cx="24" cy="24" r="23" fill="none"/>
+    </g>
+    <path id="bxs-cloud-download" d="M22.314,14.467A7.99,7.99,0,0,0,14.4,7.5a7.682,7.682,0,0,0-7.116,4.729A5.983,5.983,0,0,0,3,17.759a5.692,5.692,0,0,0,5.367,5.667v.033h12.86v0l.011,0a4.56,4.56,0,0,0,1.076-8.992ZM9.839,15.479h3.42V12.06h2.28v3.42h3.42l-4.56,5.7Z" transform="translate(588.601 693.021)" fill="#e9ffff"/>
+  </g>
+</svg>

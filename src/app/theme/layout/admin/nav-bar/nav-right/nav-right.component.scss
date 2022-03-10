@@ -1,0 +1,116 @@
+.stat-icon-wrapper {
+    padding: 5px 15px 5px 0;
+    font-size: 30px;
+}
+
+.of-not-x {
+    overflow-x: hidden !important;
+}
+
+.of-y {
+    overflow-y: auto !important;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.no-notification {
+    height: 100%;
+    img { width: 40% !important; }
+}
+
+// Shimmer Effect CSS
+#shine {
+	background: #f6f7f8;
+	background-image: linear-gradient(to right, #f6f7f8 0%, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%);
+	background-repeat: no-repeat;
+	background-size: 800px 104px;
+	display: inline-block;
+	position: relative;
+	animation-duration: 1s;
+	animation-fill-mode: forwards;
+	animation-iteration-count: infinite;
+	animation-name: placeholderShimmer;
+	animation-timing-function: linear;
+	-webkit-animation-duration: 1s;
+	-webkit-animation-fill-mode: forwards;
+	-webkit-animation-iteration-count: infinite;
+	-webkit-animation-name: placeholderShimmer;
+	-webkit-animation-timing-function: linear;
+}
+
+.box {
+	height: 80px;
+	width: 100px;
+	margin-left: 25px;
+	margin-top: 10px;
+	background-color: #f7f7f7;
+	vertical-align: top;
+}
+
+.lines {
+	height: 10px;
+	margin-top: 10px;
+	margin-left: 10%;
+	width: 270px;
+	background-color: #bdbdbd;
+}
+
+@keyframes placeHolderShimmer {
+	0% {
+		background-position: -468px 0;
+	}
+	100% {
+		background-position: 468px 0;
+	}
+}
+
+@-webkit-keyframes placeholderShimmer {
+	0% {
+		background-position: -468px 0;
+	}
+	100% {
+		background-position: 468px 0;
+	}
+}
+
+.shake-bell:hover{
+
+	animation: shake 0.5s;
+	animation-iteration-count: infinite;
+
+}
+
+@keyframes shake {
+	0% { transform: translate(1px, 1px) rotate(0deg); }
+	10% { transform: translate(-1px, -2px) rotate(-1deg); }
+	20% { transform: translate(-3px, 0px) rotate(1deg); }
+	30% { transform: translate(3px, 2px) rotate(0deg); }
+	40% { transform: translate(1px, -1px) rotate(1deg); }
+	50% { transform: translate(-1px, 2px) rotate(-1deg); }
+	60% { transform: translate(-3px, 1px) rotate(0deg); }
+	70% { transform: translate(3px, 1px) rotate(-1deg); }
+	80% { transform: translate(-1px, -1px) rotate(1deg); }
+	90% { transform: translate(1px, 2px) rotate(0deg); }
+	100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+
+.wallet-container {
+	display: flex;
+    justify-content: center;
+    align-items: center;
+
+	span {
+		margin-left: .5rem;
+	}
+
+	svg {
+		width: 1rem;
+
+		.a {
+			// fill: white;
+			stroke: white;
+		}
+	}
+}

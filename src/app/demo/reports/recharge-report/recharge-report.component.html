@@ -1,0 +1,86 @@
+<form [formGroup]="reportForm" (submit)="submitReport()">
+  <div class="row">
+    <div class="col-md-3">
+      <!-- <div class="form-group">
+        <label for="dateRange">Select From Date :</label>
+        <input name="dateRange" [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="dateRange"
+          class="form-control" [max]="today" [min]="minimumDate" readonly="true" placeholder="DD-MM-YYYY"
+          (ngModelChange)="saverange($event)">
+        <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+      </div> -->
+      <div class="form-group">
+        <label for="dateRange">From Date :</label>
+        <div class="input-group">
+          <div class="input-group-prepend"> <span class="input-group-text"> <i class="fa fa-calendar"></i> </span>
+          </div>
+          <input name="dateRange" [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="dateRange"
+            class="form-control" [max]="today" [min]="minimumDate" readonly="true" placeholder="MM-DD-YYYY"
+            (ngModelChange)="saverange($event)">
+          <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+        </div>
+
+        <!-- <small class="form-text date-valid-message"
+          [ngStyle]="{'opacity': reportForm.get('dateRange').hasError('incorrect') ? '1' : '0'}">Maximum range value is
+          10.</small> -->
+
+        <!-- <label for="dateRange">Select Range: </label>
+          <input name="dateRange" formControlName="dateRange" [owlDateTime]="dateRange"
+            placeholder="DD-MM-YYYY - DD-MM-YYYY" [owlDateTimeTrigger]="dateRange" class="form-control"
+            [selectMode]="'range'" [rangeSeparator]="' - '" [max]="today" [min]="minimumDate" readonly="true" />
+  
+          <owl-date-time [firstDayOfWeek]="'1'" [pickerType]="'calendar'" #dateRange></owl-date-time>
+          <small class="form-text date-valid-message"
+            [ngStyle]="{'opacity': reportForm.get('dateRange').hasError('incorrect') ? '1' : '0'}">Maximum range value is
+            10.</small> -->
+        <!-- <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Choose a date</mat-label>
+              <input matInput [min]="minimumDate" name="dateRange"  [max]="today" formControlName="dateRange" class="form-control" [matDatepicker]="picker">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field> -->
+        <!-- <input type="date" class="form-control" formControlName="fromdate" id="date-picker"
+                            placeholder="Select Date" (click)="limitDate()" max="today" min="minimumDate"> -->
+      </div>
+    </div>
+    <!-- <div class="col-md-3">
+      <div class="form-group">
+          <label for="dateRange1">Select To Date :</label>
+          <input name="dateRange1" [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2"
+              formControlName="dateRange1" class="form-control" [max]="somedate1"
+              [min]="minimumDate1" readonly="true" placeholder="DD-MM-YYYY">
+          <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+      </div>
+  </div> -->
+  <div class="col-md-3">
+    <label for="dateRange">To Date :</label>
+    <div class="input-group">
+      <div class="input-group-prepend"> <span class="input-group-text"> <i class="fa fa-calendar"></i> </span> </div>
+      <input name="dateRange" [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" formControlName="dateRange1"
+        class="form-control" [max]="somedate1" [min]="minimumDate1" readonly="true" placeholder="MM-DD-YYYY">
+      <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+    </div>
+    <!-- <small class="form-text date-valid-message"
+         [ngStyle]="{'opacity': reportForm.get('dateRange1').hasError('incorrect') ? '1' : '0'}">Maximum range value is
+         10.</small> -->
+  </div>
+    
+    <div class="col-md-3 mb-sm-4">
+      <div class="form-group">
+        <label for="rechargeSubCat">Select Sub-category: </label>
+        <select class="form-control" id="dmtSubCat" formControlName="subCat">
+          <option value="ALL">ALL</option>
+          <option value="Recharge_Prepaid">Prepaid</option>
+          <option value="Recharge_Postpaid">Postpaid</option>
+          <option value="Recharge_DTH">Dth</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-md-2 submitBtnCol">
+      <div class="form-group">
+        <button *ngIf="!fetchingReport && !reportForm.invalid" type="submit" class="btn btn-primary">Submit</button>
+        <button *ngIf="fetchingReport || reportForm.invalid" type="button" class="btn btn-primary"
+          disabled>Submit</button>
+      </div>
+    </div>
+  </div>
+</form>

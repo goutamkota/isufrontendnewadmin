@@ -1,0 +1,169 @@
+<!-- <div class="settings-container">
+    <div class="row">
+        <div class="col-sm-4">
+            <app-card [hidHeader]="true" [cardClass]="'setting'" [routerLink]="['/v1/wallet-top-up']">
+                <h4 class="card-title">Add Bank</h4>
+                <p class="card-text">Wallet Top Up</p>                
+            </app-card>
+        </div>
+        <div class="col-sm-4">
+            <app-card [hidHeader]="true" [cardClass]="'setting'" [routerLink]="['/v1/settings/plan']">
+                Two
+            </app-card>
+        </div>
+        <div class="col-sm-4">
+
+        </div>
+    </div>
+</div> -->
+
+<div class="container">
+    <div class="col-sm-12">
+        <div class="row col-sm-12 mt-5">
+            <div class="col-sm-4 card_div">
+                <div class="card adv_sup" style="height: 11rem; margin-top: 15px">
+                    <div class="card_logo">
+                        <img src="assets/images/ads.png" alt="">
+                    </div>
+                    <div class="card-body">
+                        <div class="card-inn">
+                            <h4 class="card_msg">Margin Settings</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4 card_div">
+                <div class="card edit_sup" style="height: 11rem; margin-top: 15px">
+                    <div class="card_logo">
+                        <img src="assets/images/edit.png" alt="">
+                    </div>
+                    <div class="card-body" [routerLink]="['/v1/settings/usermargin']">
+                        <div class="card-inn">
+                            <h4 class="card_msg">Use-wise Margin</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+ 
+            <div class="col-sm-4 card_div">
+                <div class="card active_sup" style="height: 11rem; margin-top: 15px">
+                    <div class="card_logo">
+                        <img src="assets/images/user.png" alt="">
+                    </div>
+                    <div class="card-body" [routerLink]="['/v1/settings/autosettel']">
+                        <div class="card-inn">
+                            <h4 class="card_msg">Auto Settlement</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+     
+     
+    </div>
+
+    <div class="col-sm-12">
+        <div class="row col-sm-12 mt-5">
+        
+            <div class="col-sm-4 card_div">
+                <div class="card repass_sup" style="height: 11rem; margin-top: 15px">
+                    <div class="card_logo">
+                        <img src="assets/images/pws.png" alt="">
+                    </div>
+                    <div class="card-body">
+                        <div class="card-inn">
+                            <h4 class="card_msg">API Switching</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4 card_div">
+                <div class="card pin_sup" style="height: 11rem; margin-top: 15px" >
+                    <div class="card_logo">
+                        <img src="assets/images/pinimg.png" alt="">
+                    </div>
+                    <div class="card-body">
+                        <div class="card-inn">
+                            <h4 class="card_msg">SMS Settings</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4 card_div">
+                <div class="card exotel_sup" style="height: 11rem; margin-top: 15px" >
+                    <div class="card_logo">
+                        <img src="assets/images/support.png" alt="">
+                    </div>
+                    <div class="card-body">
+                        <div class="card-inn">
+                            <h4 class="card_msg">AEPS CSP Form</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+        </div>
+     
+     
+    </div>
+    
+    <div class="col-sm-12">
+        <div class="row col-sm-12 mt-5">
+        
+            <div class="col-sm-4 card_div">
+                <div class="card manual_sup" style="height: 11rem; margin-top: 15px">
+                    <div class="card_logo">
+                        <img src="assets/images/pws.png" alt="">
+                    </div>
+                    <div class="card-body" [routerLink]="['/v1/settings/panupdate']">
+                        <div class="card-inn">
+                            <h4 class="card_msg">PAN Update</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4 card_div">
+                <div class="card gateway_sup" style="height: 11rem; margin-top: 15px" >
+                    <div class="card_logo">
+                        <img src="assets/images/pinimg.png" alt="">
+                    </div>
+                    <div class="card-body"   [routerLink]="['/v1/settings/devicemapping']">
+                        <div class="card-inn">
+                            <h4 class="card_msg">Device Mapping</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4 card_div">
+                <div class="card active_sup " style="height: 11rem; margin-top: 15px" >
+                    <div class="card_logo">
+                        <img src="assets/images/support.png" alt="">
+                    </div>
+                    <div class="card-body" [routerLink]="['/v1/settings/changetheme']">
+                        <div class="card-inn">
+                            <h4 class="card_msg">Change Theme</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-4 card_div">
+                <div class="card active_sup " style="height: 11rem; margin-top: 15px" >
+                    <div class="card_logo">
+                        <img src="assets/images/support.png" alt="">
+                    </div>
+                    <div class="card-body" [routerLink]="['/v1/settings/subuser']">
+                        <div class="card-inn">
+                            <h4 class="card_msg">Sub User Role Assign</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+    
+        </div>
+     
+     
+    </div>
+    </div>

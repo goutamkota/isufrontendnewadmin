@@ -1,0 +1,18 @@
+.submitBtnCol {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  .form-group {
+    margin-bottom: 2.4rem;
+  }
+}
+
+.date-valid-message {
+  color: red;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.form-control[readonly] {
+  background-color: #fff;
+}

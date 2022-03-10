@@ -1,0 +1,239 @@
+<div class="balance-requests-container">
+
+    <app-card [hidHeader]="true">
+
+        <form [formGroup]="walletTopUpForm" (submit)="fetchWalletTopUpRequests()">
+            <div class="row">
+                <!-- <div class="col-md-3 order-md-1 order-2">
+                    <label>Search for any data in the report: </label>
+                    <div class="input-group searchInput">
+                        <div class="input-group-prepend"> <span class="input-group-text" id="basic-addon1"> <i class="feather icon-search"></i> </span> </div>
+                        <input type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="basic-addon1" (keyup)="updateFilter($event)" [formControl]="searchInput"> 
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6 order-md-2 order-1 date-range-container">
+                    <div class="form-group">
+                        <label for="dateRange">Select Range: </label>
+                        <input name="dateRange" formControlName="dateRange" [owlDateTime]="dateRange"
+                          placeholder="DD-MM-YYYY - DD-MM-YYYY" [owlDateTimeTrigger]="dateRange" class="form-control"
+                          [selectMode]="'range'" [rangeSeparator]="' - '" [max]="today" [min]="minimumDate" readonly="true" />
+                
+                        <owl-date-time [firstDayOfWeek]="'1'" [pickerType]="'calendar'" #dateRange></owl-date-time>
+                        <small class="form-text date-valid-message"
+                        [ngStyle]="{'opacity': walletTopUpForm.get('dateRange').hasError('incorrect') ? '1' : '0'}">Maximum range value is
+                        10.</small>
+                    </div>
+                </div> -->
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="dateRange">From Date :</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend"> <span class="input-group-text"> <i class="fa fa-calendar"></i> </span>
+                      </div>
+                      <input name="dateRange" [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="dateRange"
+                        class="form-control" [max]="today" [min]="minimumDate" readonly="true" placeholder="MM-DD-YYYY"
+                        (ngModelChange)="saverange($event)">
+                      <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+                    </div>
+            
+                    <!-- <small class="form-text date-valid-message"
+                      [ngStyle]="{'opacity': reportForm.get('dateRange').hasError('incorrect') ? '1' : '0'}">Maximum range value is
+                      10.</small> -->
+            
+                    <!-- <label for="dateRange">Select Range: </label>
+                      <input name="dateRange" formControlName="dateRange" [owlDateTime]="dateRange"
+                        placeholder="DD-MM-YYYY - DD-MM-YYYY" [owlDateTimeTrigger]="dateRange" class="form-control"
+                        [selectMode]="'range'" [rangeSeparator]="' - '" [max]="today" [min]="minimumDate" readonly="true" />
+              
+                      <owl-date-time [firstDayOfWeek]="'1'" [pickerType]="'calendar'" #dateRange></owl-date-time>
+                      <small class="form-text date-valid-message"
+                        [ngStyle]="{'opacity': reportForm.get('dateRange').hasError('incorrect') ? '1' : '0'}">Maximum range value is
+                        10.</small> -->
+                    <!-- <mat-form-field class="example-full-width" appearance="outline">
+                          <mat-label>Choose a date</mat-label>
+                          <input matInput [min]="minimumDate" name="dateRange"  [max]="today" formControlName="dateRange" class="form-control" [matDatepicker]="picker">
+                          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                          <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field> -->
+                    <!-- <input type="date" class="form-control" formControlName="fromdate" id="date-picker"
+                                        placeholder="Select Date" (click)="limitDate()" max="today" min="minimumDate"> -->
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <label for="dateRange">To Date :</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend"> <span class="input-group-text"> <i class="fa fa-calendar"></i> </span> </div>
+                    <input name="dateRange" [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" formControlName="dateRange1"
+                      class="form-control" [max]="somedate1" [min]="minimumDate1" readonly="true" placeholder="MM-DD-YYYY">
+                    <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+                  </div>
+                  <!-- <small class="form-text date-valid-message"
+                       [ngStyle]="{'opacity': reportForm.get('dateRange1').hasError('incorrect') ? '1' : '0'}">Maximum range value is
+                       10.</small> -->
+                </div>
+
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="walletSubCat">Transfer Type:</label>
+                    <select class="form-control" id="walletSubCat" formControlName="transferType">
+                      <option value="ALL">ALL</option>
+                      <option value="CDM">CDM</option>
+                      <option value="Cash Deposit">CASH DEPOSIT</option>
+                      <option value="IFT">IFT</option>
+                      <option value="IMPS">IMPS</option>
+                      <option value="Interwallet DEBIT">INTERWALLET DEBIT</option>
+                      <option value="Interwallet PAY">INTERWALLET PAY</option>
+                      <option value="NEFT">NEFT</option>
+                      <option value="PG_Internet Banking">PG_INTERNET BANKING</option>
+                      <option value="QR_COLLECT">QR_COLLECT</option>
+                      <option value="RTGS">RTGS</option>
+                      <option value="UPI_COLLECT">UPI_COLLECT</option>
+                      <option value="VA">VA</option>
+          
+                    </select>
+                  </div>
+                  <div *ngIf="walletTopUpForm.get('transferType').hasError('required') && walletTopUpForm.get('transferType').touched"
+                    class="err-message">
+                    <span class="text-danger mx-4">It can't be Blank</span>
+                  </div>
+          
+                </div>
+
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="walletSubCat">Operation Performed: </label>
+                    <select class="form-control" id="walletSubCat" formControlName="oprPerf">
+                      <option value="ALL">ALL</option>
+                      <option value="CREDIT">CREDIT</option>
+                      <option value="DEBIT">DEBIT</option>
+                    </select>
+                  </div>
+                  <div *ngIf="walletTopUpForm.get('oprPerf').hasError('required') && walletTopUpForm.get('oprPerf').touched"
+                    class="err-message">
+                    <span class="text-danger mx-4">It can't be Blank</span>
+                  </div>
+          
+                </div>
+
+                <div class="col col-md-3 order-3">
+                    <div class="balance-request-btn-container">
+                        <button type="submit" class="btn btn-primary btn-block" [disabled]="walletTopUpForm.invalid">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </app-card>
+
+    <div class="dataTable" *ngIf="!fetchingReport">
+      <div class="card">
+        <div class="card-body">
+        <div class="d-flex flex-row justify-content-between dtBtns">
+          <div class="input-group searchInput">
+            <div class="input-group-prepend"> <span class="input-group-text" id="basic-addon1"> <i class="feather icon-search"></i> </span> </div>
+            <input type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="basic-addon1" (keyup)="updateFilter($event)" [formControl]="searchInput"> 
+        </div>
+        <div class="total-records">
+          <span>Total Records:&nbsp;{{totalpagecount}}</span>
+          <span>,&nbsp;&nbsp;Total Amount:&nbsp;{{total}}</span>
+        </div>
+            <div class="table-exc-print" *ngIf="walletReports.records.length">
+                <button type="button" class="btn btn-primary" (click)="downloadExcel()"><i class="feather icon-file"></i> Excel</button>
+            </div>
+        </div>
+    </div>
+      </div>
+    </div>
+    <div *ngIf="walletReports.records.length">
+      <ngx-datatable #table class="material" [headerHeight]="50" [footerHeight]="50" [limit]="10" [rows]="walletReports.records" columnMode="force" [scrollbarH]="true" [columns]="walletReports.recordHeaders" [rowHeight]="510">
+        <ngx-datatable-footer>
+          <ng-template ngx-datatable-footer-template let-rowCount="rowCount"
+            let-pageSize="pageSize" let-selectedCount="selectedCount" let-curPage="curPage"
+            let-offset="offset" let-isVisible="isVisible">
+            <div class="countAlign">
+              <span>Total:&nbsp;{{rowCount}}</span>
+            </div>
+            <div class="page-limit-container">
+              <select (change)="onLimitChange($event.target.value)" class="form-control px-1">
+                <option *ngFor="let option of pageLimitOptions" [value]="option.value"
+                  [selected]="option.value == currentPageLimit">
+                  {{option.value}}
+                </option>
+              </select>
+            </div>
+
+            <datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'"
+              [pagerRightArrowIcon]="'datatable-icon-right'"
+              [pagerPreviousIcon]="'datatable-icon-prev'"
+              [pagerNextIcon]="'datatable-icon-skip'" [page]="curPage" [size]="pageSize"
+              [count]="rowCount" [hidden]="!((rowCount / pageSize) > 1)"
+              (change)="table.onFooterPage($event)">
+            </datatable-pager>
+          </ng-template>
+        </ngx-datatable-footer>
+      </ngx-datatable>
+    </div>
+
+    <!-- <div class="position-absolute" style="width: 95%;">
+
+      <div class="dataTable"   @fadeSlideInOut>
+        <div class="card">
+          <div class="card-body">
+            <div class="d-md-flex flex-row justify-content-between dtBtns pb-2">
+              <div class="input-group searchInput">
+                <div class="input-group-prepend"> <span class="input-group-text" id="basic-addon1"> <i
+                      class="feather icon-search"></i> </span> </div>
+                <input type="text" class="form-control" placeholder="Search in Table" aria-label="Search"
+                  aria-describedby="basic-addon1" (keyup)="updateFilter($event)"
+                  [formControl]="searchInput">
+              </div>
+              <div class="total-records">
+                <span>Total Records:&nbsp;{{totalpagecount}}</span>
+                <span>,&nbsp;&nbsp;Total Amount:&nbsp;{{total}}</span>
+              </div>
+              <div class="d-md-flex">
+
+                <div class="table-exc-print text-center">
+                  <button type="button" class="btn btn-primary" (click)="downloadExcel()"
+                    [attr.disabled]="reports.length ? null : 'disabled'"><i class="fa fa-download"></i>
+                    Excel</button>
+                </div>
+              </div>
+            </div>
+            </div>
+        </div>
+      </div>
+      <div>
+        <ngx-datatable #table class="material" [headerHeight]="50" [footerHeight]="50" [limit]="50"
+          [rows]="walletReports.records" columnMode="force" [scrollbarH]="true" [columns]="tableCols"
+          [rowHeight]="50">
+          <ngx-datatable-footer>
+            <ng-template ngx-datatable-footer-template let-rowCount="rowCount"
+              let-pageSize="pageSize" let-selectedCount="selectedCount" let-curPage="curPage"
+              let-offset="offset" let-isVisible="isVisible">
+              <div class="countAlign">
+                <span>Total:&nbsp;{{rowCount}}</span>
+              </div>
+            </ng-template>
+          </ngx-datatable-footer>
+        </ngx-datatable>
+      </div>
+  
+    </div> -->
+    <ng-template #dateTemplate let-value="value"> <span>{{ value | date: 'medium' }}</span></ng-template>
+
+    <ng-template #statusTemplate let-value="value"> 
+        <span *ngIf="['SUCCESS', 'REFUNDED', 'APPROVED'].includes(value)" class="badge m-r-5 badge-pill badge-success">{{value}}</span> 
+        <span *ngIf="['INPROGRESS', 'INITIATED', 'ONHOLD', 'PENDING' , 'REINITIATED'].includes(value)" class="badge m-r-5 badge-pill badge-warning">{{value}}</span> 
+        <span *ngIf="['FAILED', 'REJECTED'].includes(value)" class="badge m-r-5 badge-pill badge-danger">{{value}}</span>
+    </ng-template>
+
+    <ng-template #actionTemplate let-row="row" let-col="column">
+        <div class="action-column-container">
+            <i class="feather icon-clipboard" [placement]="'left'" ngbTooltip="Remarks" (click)="showRemarks(row.remarks)"></i>
+        </div>
+    </ng-template>
+
+</div>
+
+<ngx-spinner name="walletTopUpReportSpinner"><p style="color: white; margin-top: 50px;" > Fetching Wallet Top Up Reports... </p></ngx-spinner>

@@ -1,0 +1,142 @@
+<div class="card switch_cnt">
+    <div class="switch_topbar">
+        <button class="btn btn-primary waveEfct back" [routerLink]="['/v1/settings']"><i
+                class="fas fa-caret-left"></i>&nbsp;&nbsp;Back</button>
+        <div class="switch_title">Change Logo and Brand</div>
+        <button border="none" class=" btn minimize" (click)="minimize()"><i class="far fa-window-minimize"></i></button>
+    </div>
+
+    <!-- <div class="row">
+        <div class="col-md-12">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#">Logo</a></li>
+                <li><a href="#">Brand</a></li>
+            </ul>
+        </div>
+    </div> -->
+
+    <ul class="pri-tabs justify-content-start">
+
+        <li (click)="priActiveTab = 1; searchComplete = false" [ngClass]="{'active':priActiveTab == 1}">Logo
+
+        </li>
+
+        <li (click)="priActiveTab = 2; searchComplete = false" [ngClass]="{'active':priActiveTab == 2}">Brand
+
+        </li>
+
+    </ul>
+
+    <ng-container *ngIf="priActiveTab == 1">
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-12">
+                <button *ngIf="editbtn" type="button" class="btn btn-default" (click)="showbtn()">
+                    <span>
+                        <i class="fa fa-pencil-alt">Edit</i>
+                    </span>
+
+                </button>
+            </div>
+            <div class="col-lg-8"></div>
+        </div>
+
+        <div style="margin-top:30px;" class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <img src="/assets/images/profileImg.png" alt="logo">
+                <button *ngIf="uploadbtn" type="button" class="btn btn-primary btn-lg">
+                    <span>
+                        <i class="fa fa-save"></i>
+                        &nbsp;Upload
+                        <input type="file" class="file_upload" name="file" id="User_logo">
+                    </span>
+                </button>
+
+                <button *ngIf="cancelbtn" id="close" (click)="cancel()" type="button" class="btn btn-danger btn-lg">
+                    <span>
+                        <i class="fa fa-times"></i>
+                        &nbsp; Cancel
+                    </span>
+                </button>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="priActiveTab == 2">
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-12">
+                <button *ngIf="checkbtn" (click)="enablebtn()" type="button" class="btn btn-default">
+                    <span>
+                        <i class="fa fa-pencil-alt">Editt</i>
+                    </span>
+
+                </button>
+            </div>
+            <div class="col-lg-8"></div>
+        </div>
+
+        <div style="margin-top: 20px;" class="row">
+            <div class="col-lg-4">
+
+                <label>Brand Name:</label>
+                <input type="text" class="form-control" placeholder="ISU DIGITAL PAY" disabled>
+
+            </div>
+            <div class="col-lg-4">
+                <button type="button" class="btn btn-default">
+                    <span>
+                        <input type="color">
+                        Change Color
+                    </span>
+                </button>
+            </div>
+            <div class="col-lg-4">
+                <button *ngIf="savebtn" type="button" class="btn btn-primary">
+                    <span>
+                    <i class="fa fa-save"></i>
+                 &nbsp;Save
+                 </span>
+                </button>
+
+                <button *ngIf="deletebtn" type="button" class="btn btn-danger" (click)="closebtn()">
+                    <span>
+                        <i class="fa fa-times"></i>
+                        &nbsp;Cancell
+                    </span>
+                </button>
+            </div>
+        </div>
+
+
+    </ng-container>
+
+    <!-- <div style="margin-top:30px;" class="row">
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-8">
+            
+            <button *ngIf="uploadbtn" type="button" class="btn btn-primary btn-lg">
+            <span>
+                <i class="fa fa-save"></i>
+            &nbsp;Upload
+            <input type="file" class="file_upload" name="file" id="User_logo">
+            </span>
+            </button>
+
+            <button *ngIf="cancelbtn" id="close" (click)="cancel()" type="button" class="btn btn-danger btn-lg">
+                <span>
+                <i class="fa fa-times"></i>   
+               &nbsp; Cancel
+                </span>
+            </button>
+        </div>
+        <div class="col-md-2">
+        </div>
+    </div> -->
+    <!-- <div class="row">
+     <div>
+         <p>NOTE : Photo only allows file types of GIF, PNG, JPG, JPEG and BMP. and size less than 1MB.</p>
+     </div>
+    </div> -->
+</div>

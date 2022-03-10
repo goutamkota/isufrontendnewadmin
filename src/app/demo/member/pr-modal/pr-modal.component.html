@@ -1,0 +1,51 @@
+<div class="prb-modal">
+    <div class="card">
+        <i class="close-btn" (click)="hideModal()">+</i>
+        <div class="card-head">{{modalData.modalHeading}}</div>
+        <div class="row">
+            <div class="col-sm-7">
+                <table class="table table-stripped table-bordered" [style.background]="'#4680ff22'">
+                    <tr><th>User Name</th><td>{{modalData.userData.userName}}</td></tr>
+                    <tr><th>Name</th><td>{{modalData.userData.agentName}}</td></tr>
+                    <tr><th>Mobile Number</th><td>{{modalData.userData.mobileNumber}}</td></tr>
+                    <tr><th>Transfor Date</th><td>{{modalData.date}}</td></tr>
+                </table>
+            </div>
+            <div class="col-sm-5">
+                <form [formGroup]="addBalanceForm" (submit)="payDebitForm(modalData.modalType)">
+                    <input name="user" formControlName="user" type="hidden" [value]="modalData.user" />
+                    <div class="form-group">
+                        <label for="amount"><b>Amount:</b> </label>
+                        <input validAmountWithDecimal name="amount" formControlName="amount" class="form-control" maxlength="7" />
+                    </div>
+                    <div class="form-group">
+                        <label for="remarks"><b>Comment:</b> </label>
+                        <input name="remarks" formControlName="remarks" class="form-control" />
+                    </div>
+                    <div class="form-group d-flex justify-content-end add-balance-btn-container">
+                        <button type="submit" class="btn btn-primary" [disabled]="addBalanceForm.invalid" *ngIf="modalData.modalType == 'debit'">Debit</button>
+                        <button type="submit" class="btn btn-primary" [disabled]="addBalanceForm.invalid" *ngIf="modalData.modalType == 'pay'">Pay</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="trans-bg" (click)="hideModal()"></div>
+</div>
+
+<div class="prb-modal" *ngIf="confirmModal.show">
+    <div class="card" [ngClass]="confirmModal.data.class">
+        <i class="close-btn" (click)="confirmModal.show = false">+</i>
+        <!-- <div class="card-head">{{modalData.modalHeading}}</div> -->
+        <div class="card-body"><span style="font-size: 18px;">{{confirmModal.msg}}</span></div>
+        <div class="card-foot p-2 text-right">
+            <button class="btn btn-primary m-2" type="button" (click)="priConfirmBal(confirmModal.data);" *ngIf="!confirmModal.data.alert">Ok</button>
+            <button class="btn btn-info m-2" type="button" (click)="confirmModal.show = false" *ngIf="!confirmModal.data.alert">Cancel</button>
+            <button class="btn btn-primary m-2" type="button" (click)="confirmModal.show = false; hideModal()" *ngIf="confirmModal.data.alert">Ok</button>
+        </div>
+    </div>
+    <div class="trans-bg" (click)="hidePopModal()"></div>
+</div>
+<div class="loader-container" *ngIf="searching">
+    <div class="loader"></div>
+</div>

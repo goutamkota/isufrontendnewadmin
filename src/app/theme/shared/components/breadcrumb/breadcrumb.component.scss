@@ -1,0 +1,12 @@
+.no-click-link {
+    color: #535763 !important;
+    cursor: unset;
+    &.page-title{
+        // font-weight: bold;
+        transform: scale(1.0);
+    }
+}
+.page-header.ng-star-inserted{margin-bottom: 0;}
+.click-link {
+    color: #4680ff;
+}

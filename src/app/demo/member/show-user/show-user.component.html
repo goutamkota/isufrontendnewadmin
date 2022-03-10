@@ -1,0 +1,674 @@
+<ul class="pri-tabs justify-content-start" *ngIf="edituserdetails">
+    <li (click)="priActiveTab = 1;priTabChange(); searchComplete = false" [ngClass]="{'active':priActiveTab == 1}">All
+        Children Under
+        an User</li>
+    <li (click)="priActiveTab = 2;priTabChange(); searchComplete = false" [ngClass]="{'active':priActiveTab == 2}">Find
+        All Children
+        Under Me</li>
+    <li (click)="priActiveTab = 3;priTabChange(); searchComplete = false" [ngClass]="{'active':priActiveTab == 3}">
+        Search User Name
+    </li>
+    <li (click)="priActiveTab = 4;priTabChange(); searchComplete = false" [ngClass]="{'active':priActiveTab == 4}">
+        Recently Onboarded
+    </li>
+</ul>
+<div *ngIf="!edituserdetails">
+    <button class="btn btn-primary btn-block border-rad-5 col-sm-3 ml-2 y-2" style="margin: 2%;
+    width: auto;" (click)=function1()>Back</button>
+</div>
+<div *ngIf="!edituserdetails">
+    <ul class="pri-tabs justify-content-start">
+        <li (click)="showedit = 1; searchComplete = false" [ngClass]="{'active':showedit == 1}">Edit</li>
+        <li (click)="showedit = 2; searchComplete = false " [ngClass]="{'active':showedit == 2}">Old features</li>
+        <li (click)="showedit = 3; searchComplete = false" [ngClass]="{'active':showedit == 3}">features</li>
+        <li (click)="showedit = 4; searchComplete = false" [ngClass]="{'active':showedit == 4}">Approval Properties</li>
+        <li (click)="showedit = 5; searchComplete = false" [ngClass]="{'active':showedit == 5}">Change Password</li>
+    </ul>
+</div>
+<div class="pri-tab-container" *ngIf="edituserdetails">
+    <ng-container *ngIf="priActiveTab == 1">
+        <form (reset)="leftPos = -1; utleftPos = -1" [formGroup]="getUnderUser"
+            (submit)="getChildUsers('getUnderUser')">
+            <div class="row">
+                <div class="col-md-3">
+                    <label>Parent Username:</label>
+                    <div class="input-group">
+                        <input type="text" name="username" formControlName="username" class="form-control bdr-5"
+                            placeholder="Enter Username" [matAutocomplete]="autoBankName" required
+                            (input)="getUsersList($event)"
+                            onkeypress="return (event.charCode > 64 && event.charCode < 91) ||(event.charCode > 47 && event.charCode < 58)|| (event.charCode > 96 && event.charCode < 123) || (event.charCode ==32)">
+                    </div>
+                    <mat-autocomplete #autoBankName="matAutocomplete">
+                        <mat-option *ngFor="let user of beneficiary" [value]="user.username">
+                            {{user.username}}({{user.name}}, {{user.mobile}})
+                        </mat-option>
+                    </mat-autocomplete>
+                </div>
+                <div class="col-md-2">
+                    <label>Active/Inactive:</label>
+                    <div class="input-group">
+                        <div class="activebtn">
+                            <label class="col" [ngClass]="leftPos == 0?'active':false">
+                                <input type="radio" name="activestatus" formControlName="activestatus" value="0"
+                                    class="d-none" (change)="activeStatus($event.target.value)" />
+                                Active</label>
+                            <!-- <div class="bg" [ngStyle]="{'left':leftPos*50+'%', 'width': wdth}"></div> -->
+                            <label class="col" [ngClass]="leftPos == 1?'active':false">
+                                <input type="radio" name="activestatus" formControlName="activestatus" value="1"
+                                    class="d-none" (change)="activeStatus($event.target.value)" />
+                                Inactive</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label>User Type(Optional) :</label>
+                    <div class="input-group">
+                        <div class="activebtn">
+                            <label class="" [ngClass]="utleftPos == 'MASTER_DISTRIBUTOR'?'active':false">
+                                <input type="radio" name="usertypestatus" formControlName="usertypestatus"
+                                    value="MASTER_DISTRIBUTOR" class="d-none"
+                                    (change)="usertypestatus($event.target.value)" />
+                                Master Distributor
+                            </label>
+                            <label class="" [ngClass]="utleftPos == 'DISTRIBUTOR'?'active':false">
+                                <input type="radio" name="usertypestatus" formControlName="usertypestatus"
+                                    value="DISTRIBUTOR" class="d-none" (change)="usertypestatus($event.target.value)" />
+                                Distributor
+                            </label>
+                            <label class="" [ngClass]="utleftPos == 'RETAILER'?'active':false">
+                                <input type="radio" name="usertypestatus" formControlName="usertypestatus"
+                                    value="RETAILER" class="d-none" (change)="usertypestatus($event.target.value)" />
+                                Retailer
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label for=""></label>
+                    <div>
+                        <button class="btn btn-primary mt-2 mr-2 bdr-5" type="submit"
+                            [disabled]="getUnderUser.invalid"><i class="feather icon-search"></i> Search</button>
+                        <button class="btn btn-primary mt-2 bdr-5" type="reset" (click)="resetTable1()">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </ng-container>
+    <ng-container *ngIf="priActiveTab == 2">
+        <form (reset)="mychAct = -1; mychUtype = -1" [formGroup]="getUnderMe" (submit)="getChildUsers('getUnderMe')">
+            <div class="row">
+                <div class="col-md-3">
+                    <label>Active/Inactive:</label>
+                    <div class="input-group">
+                        <div class="activebtn">
+                            <label class="col" [ngClass]="mychAct == 0?'active':false">
+                                <input type="radio" name="activestatus" formControlName="activestatus" value="0"
+                                    class="d-none" (change)="mychAct = $event.target.value" />
+                                Active
+                            </label>
+                            <label class="col" [ngClass]="mychAct == 1?'active':false">
+                                <input type="radio" name="activestatus" formControlName="activestatus" value="1"
+                                    class="d-none" (change)="mychAct = $event.target.value" />
+                                Inactive
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label>User Type:</label>
+                    <div class="input-group">
+                        <div class="activebtn">
+                            <label class="" [ngClass]="utleftPos == 'MASTER_DISTRIBUTOR'?'active':false">
+                                <input type="radio" name="usertypestatus" formControlName="usertypestatus"
+                                    value="MASTER_DISTRIBUTOR" class="d-none"
+                                    (change)="usertypestatus($event.target.value)" />
+                                Master Distributor
+                            </label>
+                            <label class="" [ngClass]="utleftPos == 'DISTRIBUTOR'?'active':false">
+                                <input type="radio" name="usertypestatus" formControlName="usertypestatus"
+                                    value="DISTRIBUTOR" class="d-none" (change)="usertypestatus($event.target.value)" />
+                                Distributor
+                            </label>
+                            <label class="" [ngClass]="utleftPos == 'RETAILER'?'active':false">
+                                <input type="radio" name="usertypestatus" formControlName="usertypestatus"
+                                    value="RETAILER" class="d-none" (change)="usertypestatus($event.target.value)" />
+                                Retailer
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label for=""></label>
+                    <div>
+                        <button class="btn btn-primary mt-2 mr-2 bdr-5" type="submit" [disabled]="getUnderMe.invalid"><i
+                                class="feather icon-search"></i> Search</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </ng-container>
+    <ng-container *ngIf="priActiveTab == 3">
+        <form (reset)="leftPos = -1; utleftPos = -1" [formGroup]="getUserDetail" (submit)="getUserDetails()">
+            <div class="row">
+                <div class="col-md-3">
+                    <label> Username:</label>
+                    <div class="input-group">
+                        <input type="text" name="username" formControlName="username" class="form-control bdr-5"
+                            placeholder="Enter Username" [matAutocomplete]="autoBankName" required
+                            (input)="getUsersList($event)"
+                            onkeypress="return (event.charCode > 64 && event.charCode < 91) ||(event.charCode > 47 && event.charCode < 58)|| (event.charCode > 96 && event.charCode < 123) || (event.charCode ==32)">
+                    </div>
+                    <mat-autocomplete #autoBankName="matAutocomplete">
+                        <mat-option *ngFor="let user of beneficiary" [value]="user.username">
+                            {{user.username}}({{user.name}}, {{user.mobile}})
+                        </mat-option>
+                    </mat-autocomplete>
+                </div>
+                <div class="col-md-3">
+                    <label for=""></label>
+                    <div>
+                        <button class="btn btn-primary mt-2 mr-2 bdr-5" type="submit"
+                            [disabled]="getUserDetail.invalid"><i class="feather icon-search"></i> Search</button>
+                        <button class="btn btn-primary mt-2 bdr-5" type="reset" (click)="resetTable2()">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </ng-container>
+    <ng-container *ngIf="priActiveTab == 4">
+        <form (reset)="leftPos = -1; utleftPos = -1" [formGroup]="recentlyOnboarded" (submit)="getRecentOnboarded()">
+            <div class="row">
+                <div class="col-md-3">
+                    <label>Choose Details:</label>
+                    <div class="input-group">
+                        <select name="reporttype" formControlName="reporttype" class="form-control bdr-5 pr_slct">
+                            <option value="0">- Choose Report Type -</option>
+                            <option value="today">Today</option>
+                            <option value="weekly">Weekly</option>
+                            <option value="monthly">Monthly</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label for=""></label>
+                    <div>
+                        <button class="btn btn-primary mt-2 mr-2 bdr-5" type="submit"
+                            [disabled]="recentlyOnboarded.get('reporttype').value == '0'"><i
+                                class="feather icon-search"></i> Search</button>
+                        <button class="btn btn-primary mt-2 bdr-5" type="reset" (click)=resetTable3()>Reset</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </ng-container>
+</div>
+<div class="pri-tab-container" *ngIf="!edituserdetails">
+    <ng-container *ngIf="showedit == 1">
+        <div>
+            <!-- <p>Update will Coming Soon</p> -->
+
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-12">
+                    <button *ngIf="editbtn" type="button" class="btn btn-primary" (click)="showbtn()">
+                        <span>
+                            <i class="fa fa-pencil-alt"></i>&nbsp;Edit
+                        </span>
+
+                    </button>
+                </div>
+                <div class="col-lg-8"></div>
+            </div><br>
+
+            <form [formGroup]="EditUserForm">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="subCat1">First Name<span class="text-danger">*</span>: </label>
+                            <input type="text" id="myAnchor1" [(ngModel)]="firstName" class="form-control NotAllowed"
+                            formControlName="fname" disabled>
+
+                            
+                            <div *ngIf="f.fname.invalid && (f.fname.dirty || f.fname.touched)" class="alert alert-danger">
+
+                                <div *ngIf="f.fname.errors.required">
+                                  Firstname is required.
+                                </div>
+                                <div *ngIf="f.fname.errors.pattern">
+                                    Enter valid name.
+                                  </div>
+                              </div>
+                                             
+                             <!-- <span ng-show="EditUserForm.fname.$touched && EditUserForm.fname.$invalid">The name is required.</span> -->
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="subCat1">Last Name<span class="text-danger">*</span>: </label>
+                            <input type="text" id="myAnchor2" [(ngModel)]="lastName" class="form-control NotAllowed"
+                            formControlName="lname" disabled>
+                            <div *ngIf="f.lname.invalid && (f.lname.dirty || f.lname.touched)" class="alert alert-danger">
+
+                                <div *ngIf="f.lname.errors.required">
+                                  lastname is required.
+                                </div>
+                                <div *ngIf="f.lname.errors.pattern">
+                                    Enter valid name.
+                                  </div>
+                              </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="subCat1">Email<span class="text-danger">*</span>: </label>
+                            <input type="email" id="myAnchor3" [(ngModel)]="email" class="form-control NotAllowed1"
+                            formControlName="mail" disabled>
+                            <div *ngIf="f.mail.invalid && (f.mail.dirty || f.mail.touched)" class="alert alert-danger">
+
+                                <div *ngIf="f.mail.errors.required">
+                                  Email is required.
+                                </div>
+                                <div *ngIf="f.mail.errors.email">
+                                  Enter valid Email address.
+                                </div>
+                              </div>
+                    
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="subCat1">Mobile No<span class="text-danger">*</span>: </label>
+                            <input type="text" id="myAnchor4" [(ngModel)]="mobileNumber" class="form-control NotAllowed1"
+                            formControlName="mobile" disabled>
+                            <div *ngIf="f.mobile.invalid && (f.mobile.dirty || f.mobile.touched)"
+                            class="alert alert-danger">
+                
+                            <div *ngIf="f.mobile.errors.required">
+                              mobile no. is required.
+                            </div>
+                            <div *ngIf="f.mobile.errors.pattern">
+                              enter valid mobile no.
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="subCat1">Address:<span class="text-danger">*</span> </label>
+                            <input type="text" id="myAnchor5" [(ngModel)]="address" class="form-control NotAllowed"
+                            formControlName="address" disabled>
+                            <div *ngIf="f.address.invalid && (f.address.dirty || f.address.touched)" class="alert alert-danger">
+
+                                <div *ngIf="f.address.errors.required">
+                                  address is required.
+                                </div>
+                                <div *ngIf="f.address.errors.pattern">
+                                    Enter valid address.
+                                  </div>
+                              </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="subCat1">City:<span class="text-danger">*</span> </label>
+                            <input type="text" id="myAnchor6" [(ngModel)]="city" class="form-control NotAllowed"
+                            formControlName="city" disabled>
+                            <div *ngIf="f.city.invalid && (f.city.dirty || f.city.touched)" class="alert alert-danger">
+
+                                <div *ngIf="f.city.errors.required">
+                                  city is required.
+                                </div>
+                                <div *ngIf="f.city.errors.pattern">
+                                    Enter valid city name.
+                                  </div>
+                                
+                              </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="subCat1">State:<span class="text-danger">*</span> </label>
+                            <input type="text" id="myAnchor7" [(ngModel)]="state" class="form-control NotAllowed"
+                            formControlName="state" disabled>
+                            <div *ngIf="f.state.invalid && (f.state.dirty || f.state.touched)" class="alert alert-danger">
+
+                                <div *ngIf="f.state.errors.required">
+                                  state is required.
+                                </div>
+                                <div *ngIf="f.state.errors.pattern">
+                                    Enter valid state name.
+                                  </div>
+                              </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="subCat1">Shop Name<span class="text-danger">*</span>: </label>
+                            <input type="text" id="myAnchor8" [(ngModel)]="shopName" class="form-control NotAllowed"
+                            formControlName="shopname" disabled>
+                            <div *ngIf="f.shopname.invalid && (f.shopname.dirty || f.shopname.touched)" class="alert alert-danger">
+
+                                <div *ngIf="f.shopname.errors.required">
+                                    shopname is required.
+                                </div>
+                                <div *ngIf="f.shopname.errors.pattern">
+                                    Enter valid shopname.
+                                  </div>
+                              </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4"></div>
+
+
+
+                    <div class="col-sm-6">
+                        <mat-label class="form_label"><strong>Upload
+                                Aadhar</strong><span class="text-danger">*</span>:
+                        </mat-label>
+
+                        <div class="row col-sm-12 aadhar_data">
+
+                            <div class="aadhar_field">
+                                <label class="lblUploadFileaadhar" style=" cursor: pointer;
+                            display: inline-flex;
+                            padding-top:9%;
+                            border: 1px solid #e2e2e2;
+                            width: 420px;
+                            height: 85px;
+                            
+                            background: #FFFFFF 0% 0% no-repeat padding-box;
+                            border: 1px dashed #D1D6D6;
+                            border-radius: 5px;
+                            opacity: 1;" for="aadhar">
+                                    <div class="aadhar_upload">
+                                        <img src="assets/images/CrtshowUser/upload.svg" alt="">
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <p class="up_msg">Upload Aadhar Card</p>
+                                        <div class="col-sm-12">
+                                            <p class="size_msg">(Max Size Up to 1mb)</p>
+                                        </div>
+                                    </div>
+                                    <input type="file" id="aadhar" formControlName="aadhar"
+                                        class="aadhar-img ng-pristine ng-empty ng-invalid ng-invalid-required ng-touched"
+                                        (change)="onFileChangeaadhar($event)" accept="image/*" required=""
+                                        style="visibility:hidden;" aria-invalid="true">
+                                </label>
+
+                                <span class="aadhar_preview">
+                                    <label class="lblUploadFileaadharimg" for="aadhar">
+                                        <img aria-readonly="true" id="aadhar_id" src="{{downloadURLaadhar}}">
+                                        <!-- <span class="absPostn uploadIcon"
+                                    *ngIf="downloadURLaadhar==null || downloadURLaadhar==undefined">
+                                    <i class="fa fa-upload" aria-hidden="true"></i>
+                                </span> -->
+                                    </label>
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="col-sm-6">
+                        <mat-label class="form_label"><strong>Upload
+                                Pan</strong><span class="text-danger">*</span>:
+                        </mat-label>
+                        <div class="row col-sm-12 pan_data">
+                            <div class="pan_field">
+                                <label class="lblUploadFilepan" style=" cursor: pointer;
+                            display: inline-flex;
+                            border: 1px solid #e2e2e2;
+                            width: 420px;
+                            padding-top:5%;
+                            height: 85px;
+                            margin-left:-5%;
+                            background: #FFFFFF 0% 0% no-repeat padding-box;
+                            border: 1px dashed #D1D6D6;
+                            border-radius: 5px;
+                            opacity: 1;" for="pan">
+                                    <div class="aadhar_upload">
+                                        <img src="assets/images/CrtshowUser/upload.svg" alt="">
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <p class="up_msg">Upload Pan Card</p>
+                                        <div class="col-sm-12">
+                                            <p class="size_msg">(Max Size Up to 1mb)</p>
+                                        </div>
+                                    </div>
+                                    <input type="file" id="pan" formControlName="panCard"
+                                        class="pan-img ng-pristine ng-empty ng-invalid ng-invalid-required ng-touched"
+                                        (change)="onFileChangepan($event)" accept="image/*" required=""
+                                        style="visibility:hidden;" aria-invalid="true">
+                                </label>
+                                <span class="pan_preview">
+                                    <label class="lblUploadFilepanimg" for="aadhar">
+                                        <img id="pan_id" src="{{downloadURLpan}}">
+
+                                    </label>
+                                </span>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-4"></div>
+                    <div class="col-md-8" style="margin: 3% auto;">
+                        <button *ngIf="savebtn" type="button" class="btn btn-success" (click)="updateProfile()">
+                            <span>
+                                <i class="fa fa-save"></i>
+                                &nbsp;Save
+                            </span>
+                        </button>
+
+                        <button *ngIf="cancelbtn" (click)="closebtn()" style="margin-left: 10px;" type="button"
+                            class="btn btn-danger">
+                            <span>
+                                <i class="fa fa-times"></i>
+                                &nbsp;Cancel
+                            </span>
+                        </button>
+                    </div>
+
+
+                </div>
+            </form>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="showedit == 2">
+        <!-- <p>Update will Coming Soon</p> -->
+        <form [formGroup]="feature">
+
+            <div class="row" style="justify-content: center;">
+
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <div>
+                            
+                            <div class="row" *ngFor="let featDat of finalfeature2">
+                                <div class="col-sm-6">
+                                    
+                                    {{featDat.featureName}}
+                                </div>
+                                
+                                <div class="col-sm-6">
+                                    <mat-checkbox [checked]="featDat.active" aria-label="Disabled"
+                                        (change)="toggle(featDat, 'selected')">
+                                        <div>{{featDat.featureName}}</div>
+                                    </mat-checkbox>
+                                </div>
+                            </div>
+                            
+                            <!-- <div class="row" *ngFor="let featDat1 of getsecondfeature">
+                                <div class="col-sm-6">
+                                    {{featDat1.featureName}}
+                                </div>
+                                <div class="col-sm-6">
+                                    <mat-checkbox [checked]="featDat1.active" aria-label="Disabled"
+                                        (change)="toggle1(featDat1, 'selected')">
+                                        <div>{{featDat1.featureName}}</div>
+                                    </mat-checkbox>
+                                </div>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary btn-block border-rad-5 col-sm-3 ml-2"
+                    style="height: fit-content;" (click)="updatefeature()" [disabled]="!adminflag">Update
+                    Features</button>
+
+
+            </div>
+
+        </form>
+
+
+    </ng-container>
+    <ng-container *ngIf="showedit == 3">
+
+
+        <table class="mx-4">
+            <thead>
+                <tr>
+                    <th>
+                        <h5>Features</h5>
+                    </th>
+                    <th>
+                        <h5>Active/Inactive Features</h5>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let featrureNew of displayuserfeature1">
+                    <td>{{featrureNew.featureName}}</td>
+                    <td mr-5>
+                        <mat-checkbox [(ngModel)]="featrureNew.active"> {{featrureNew.featureName}}
+                         </mat-checkbox>   
+                        </td>
+                </tr>
+
+                
+            </tbody>
+
+            <div style="padding-left: 38%;
+            padding-top: 6%;">
+                <button type="submit" class="btn btn-primary" (click)="NewFeature()" style="width: 130px;">Update Features</button>
+            </div>
+    
+        </table>
+
+    </ng-container>
+
+
+     <ng-container *ngIf="showedit == 4">
+        <div class="row col-sm-12">
+            <h4>Choose Approval</h4>
+        </div>
+        <div class="row col-sm-12">
+            <div class="col-sm-2" style="display: flex; justify-content: center; align-items: flex-end;">
+                <span class="fa_btn"><i class="fa fa-info-circle" aria-hidden="true"></i></span>
+                <button type="button" class="btn btn_par" [ngClass]="{'active': approvalProperties == 'parent'}"
+                    (click)="approvalProperties = 'parent'">Parent</button>
+            </div>
+            <div class="col-sm-2" style="display: flex; justify-content: center; align-items: flex-end;">
+                <span class="fa_btn"><i class="fa fa-info-circle" aria-hidden="true"></i></span>
+                <button type="button" class="btn btn_adm" [ngClass]="{'active': approvalProperties == 'admin'}"
+                    (click)="approvalProperties = 'admin'">Admin</button>
+            </div>
+            <div class="col-sm-2" style="display: flex; justify-content: center; align-items: flex-end;">
+                <span class="fa_btn"><i class="fa fa-info-circle" aria-hidden="true"></i></span>
+                <button type="button" class="btn btn_adm_iser" [ngClass]="{'active': approvalProperties == 'adminIser'}"
+                    (click)="approvalProperties = 'adminIser'">Admin + iServeU</button>
+            </div>
+            <div class="col-sm-2" style="display: flex; justify-content: center; align-items: flex-end;">
+                <span class="fa_btn"><i class="fa fa-info-circle" aria-hidden="true"></i></span>
+                <button type="button" class="btn btn_iser" [ngClass]="{'active': approvalProperties == 'iserveu'}"
+                    (click)="approvalProperties = 'iserveu'">iServeU</button>
+            </div>
+            <div class="col-sm-4" style="display: flex; justify-content: center; align-items: flex-end;">
+                <button type="submit" class="btn btn_proc" style="margin-bottom: 50px;" (click)="pay_req()"
+                    [disabled]="!approvalProperties">Proceed</button>
+            </div>
+        </div>
+
+    </ng-container>
+    <ng-container *ngIf="showedit == 5">
+        <ng-container *ngIf="sendotpflag">
+            <form [formGroup]="beneform" (submit)="submitReport()">
+
+                <div class="row col-sm-12 form-group">
+
+                    <div class="col-sm-5">
+                        <div class="row">
+                            <mat-form-field  style="width: 100%;">
+                                <input appValidpassword placeholder="Change Password" matInput
+                                    formControlName="password" type="password" maxlength="10" required>
+                                <mat-hint *ngIf="beneform.get('password').value.length > 0"><span
+                                        class="err-message">The
+                                        Password
+                                        should be minimum 6 characters Should be atleast one uppercase one lowercase
+                                        letter,
+                                        one number and one special character</span>
+                                </mat-hint>
+                                <mat-error *ngIf="beneform.get('password').hasError('pattern')">
+                                    <span class="err-message">Please enter valid Password</span>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block border-rad-5 col-sm-3 ml-2 mt-2"
+                        style="height: fit-content;" [disabled]="beneform.invalid">change password</button>
+                </div>
+
+            </form>
+        </ng-container>
+        <ng-container *ngIf="!sendotpflag">
+            <form [formGroup]="beneform1" (submit)="submitReport1()">
+
+                <div class="row col-sm-12">
+
+                    <div class="col-sm-5">
+                        <div class="row">
+                            <mat-form-field class="full-width" style="width: 100%;">
+                                <input appValidotp placeholder="OTP" matInput formControlName="password1" type="text"
+                                    onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength="6"
+                                    required>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block border-rad-5 col-sm-3 ml-2"
+                        style="height: fit-content;" [disabled]="beneform1.invalid">verify
+                        OTP</button>
+                </div>
+
+            </form>
+        </ng-container>
+    </ng-container>
+</div>
+
+<div class="loader-container" *ngIf="searching">
+    <div class="loader"></div>
+</div>
+<div *ngIf="searchComplete && backflag" class="search-result">
+    <dtable [priActiveTab]="priActiveTab" [tdata]="tdataStr" [show_name]="show_name" [show_utype]="show_utype"
+        [show_status]="show_status" [show_utype1]="show_utype1" [show_status1]="show_status1"
+        [show_unamesearch]="show_unamesearch" [searchreporttype]="searchreporttype" [strMinify]="strMinify"
+        [tblOptions]="tableOptions" (apiPaging)="dataByPage($event)" [apiDataCount]="apiDataCount"
+        (commonActions)="payModal($event)" (dEBITModal)="debitModal($event)" (userStatusChange)="userStatus($event)"
+        (EditModal)="editModal($event)"
+        [columns]="['userName','agentName','userType','oldW1Balance','w1Balance','w2Balance','totalBalance','planName']">
+    </dtable>
+    <div class="no-data" *ngIf="noData">--- No Results Found ---</div>
+    <ng-container *ngIf="showModal">
+        <app-pr-modal (showModal)="showModal = $event" [modalData]="modalData" (updateDtable)="updateTdata($event)"
+            (updateWallet)="updateWalletBal()"></app-pr-modal>
+    </ng-container>
+    <ngx-spinner name="reportSpinner">
+        <p style="color: white; margin-top: 50px;"> Fetching Transaction Details... </p>
+    </ngx-spinner>

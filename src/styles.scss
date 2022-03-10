@@ -1,0 +1,183 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* SCSS */
+@import "scss/style";
+
+@import "~@swimlane/ngx-datatable/index.css";
+@import "~@swimlane/ngx-datatable/themes/material.scss";
+@import "~@swimlane/ngx-datatable/assets/icons.css";
+@import "~ng-pick-datetime/assets/style/picker.min.css";
+@import "~toastify-js/src/toastify.css";
+@import "vex-js/dist/css/vex.css";
+@import "vex-js/dist/css/vex-theme-default.css";
+
+// .datatable-header-cell {
+//   text-transform: capitalize;
+//   background-color: #4680ff;
+// }
+
+// .ngx-datatable.material .datatable-header .datatable-header-cell {
+//   text-transform: capitalize;
+//   background-color: #4680ff;
+//   color: #fff;
+// }
+
+// @import "../node_modules/angular-calendar/css/angular-calendar.css";
+// @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+// @import "../node_modules/angular-calendar/css/angular-calendar.css";
+// html,
+// body {
+//   height: 100%;
+// }
+// body {
+//   margin: 0;
+//   font-family: Roboto, "Helvetica Neue", sans-serif;
+// }
+
+// Toastr Classess Start
+.toastr-base {
+  font-size: 20px;
+}
+.toastr-success {
+  background: linear-gradient(315deg, #05e8ba 0%, #087ee1 74%);
+}
+.toastr-error {
+  background: linear-gradient(315deg, #f7b42c 0%, #fc575e 74%);
+}
+// Toastr Classess End
+
+// DMT message tip CSS Starts
+.message-tip-container {
+  cursor: pointer;
+  .tooltip-inner {
+    max-width: 300px;
+    width: 300px;
+  }
+  span:hover {
+    color: var(--yellow);
+  }
+}
+// DMT message tip CSS Ends
+
+.modal-max-600 {
+  max-width: 600px;
+}
+
+.modal-max-900 {
+  max-width: 900px;
+}
+
+.action-cell-class {
+  .popover-body {
+    display: flex;
+    div {
+      cursor: pointer;
+    }
+  }
+}
+
+.fundtransfer-new {
+  .mat-form-field {
+    width: 100%;     
+  }
+}
+
+.w-100-p {
+  width: 100% !important;
+}
+
+// CSS For Notification Pop up in the Navbar
+.pcoded-header .dropdown .notification .noti-body {
+  height: 400px;
+}
+
+.setting {
+  min-height: 300px;
+  display: grid;
+  place-content: center;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.remark-status-container {
+  h5 { 
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 1rem;
+  } 
+}
+
+.wallet-report-container, .add-balance-container {
+  .user-autocomplete {
+    .dropdown-menu {
+      max-width: 30rem;
+      max-height: 20rem;
+      overflow-x: auto;
+
+      .dropdown-item {
+        width: calc(100% - 20px);
+      }
+    }
+  }
+}
+
+
+// Css for the wallet balnce in header
+@media only screen and (max-width: 990px) {
+  .pcoded-header .navbar-nav > li {
+    &:first-child, &:nth-child(2) {
+      color: black;
+    }
+
+    .wallet-container { 
+      svg {
+        .a {
+          stroke: #000 !important;
+        }
+      }
+    }
+  }
+
+  .add-balance-functionality-container {
+    width: 100% !important;
+  }
+
+  // .balance-type-selection-container {
+  //   width: 100% !important;
+  // }
+
+  .wallet-report-container, .add-balance-container {
+    .user-autocomplete {
+      .dropdown-menu {
+        max-width: 16rem;
+        max-height: 15rem;
+        overflow-x: auto;
+      }
+    }
+  }
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Mada,sans-serif; }
+
+i.close-btn {
+  font-style: normal;
+  position: absolute;
+  z-index: 10;
+  right: 0;
+  top: 0;
+  line-height: 30px;
+  width: 30px;
+  text-align: center;
+  font-size: 30px;
+  transform: rotate(45deg) scale(1);
+  cursor: pointer;
+  transition: all 0.3s;
+  &:hover{
+    transform: rotate(225deg) scale(1.5);
+    color: #fc575e;
+  }
+}

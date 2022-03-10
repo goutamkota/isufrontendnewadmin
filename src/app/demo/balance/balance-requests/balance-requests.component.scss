@@ -1,0 +1,91 @@
+.balance-request-btn-container {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 1rem;
+
+  button {
+      border-radius: 1rem;
+      margin-bottom: 1.5rem;
+  }
+}
+
+:host ::ng-deep {
+  .card {
+    border-radius: 10px;
+  }
+
+  .ngx-datatable.material .datatable-header .datatable-header-cell {
+    text-transform: capitalize;
+    background-color: #4680ff;
+    color: #fff;
+  }
+
+  .ngx-datatable {
+    border-radius: 15px;
+  }
+}
+
+.action-column-container {
+  i {
+      margin-right: 10px;
+      cursor: pointer;
+      font-size: 1.5rem;
+
+      &:hover {
+          color: #4680ff;
+      }
+  }
+}
+
+.form-control[readonly] {
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.comment-btn-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2rem;
+
+  button {
+      margin-left: 10px;
+  }
+}
+
+.searchInput {
+  .input-group-text {
+    background-color: #fff;
+    border-radius: 10px 0 0 10px;
+  }
+  .form-control {
+    border-radius: 0 10px 10px 0;
+  }
+}
+
+.date-range-container {
+  .form-group {
+      .form-control {
+          border-radius: .5rem;
+      }
+  }
+}
+
+.table-exc-print {
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: 30px;
+  padding-top: 15px;
+  .btn {
+    border-radius: 13px;
+    box-shadow: 0 3px 3px -2px rgba(0,0,0,.2), 0 3px 4px 0 rgba(0,0,0,.14), 0 1px 8px 0 rgba(0,0,0,.12);
+    margin-right: 5px;
+  }
+}
+
+.date-valid-message {
+  color: red;
+  font-weight: bold;
+  font-size: 12px;
+}

@@ -1,0 +1,116 @@
+<form [formGroup]="reportForm" (submit)="submitReport()">
+  <div class="row">
+    <!-- <div [ngClass]="{'col-md-3': userRole === 'ROLE_ADMIN', 'col-md-3': userRole !== 'ROLE_ADMIN'}"> -->
+    <div class="col-md-3">
+      <div class="form-group">
+        <label for="subCat1">Select Sub-category: </label>
+        <select class="form-control" id="dmtReport" formControlName="subCat">
+          <option value="my_wallet1" id="customRadioInline1" class="custom-control-input">My Wallet1</option>
+          <option value="my_wallet2" id="customRadioInline2" class="custom-control-input">My Wallet2</option>
+          <option value="wallet_interchange" id="customRadioInline5" class="custom-control-input">Wallet Interchange
+          </option>
+          <option value="user_wallet1" *ngIf="userRole === 'ROLE_ADMIN'" id="customRadioInline6"
+            class="custom-control-input">User Wallet1</option>
+            <!-- <option value="user_wallet2" *ngIf="userRole === 'ROLE_ADMIN'" id="customRadioInline7"
+            class="custom-control-input">User wallet2</option> -->
+        </select>
+      </div>
+    </div>
+    <div class="'col-md-3'">
+      <div class="form-group">
+        <label for="dateRange">From Date :</label>
+        <div class="input-group">
+          <div class="input-group-prepend"> <span class="input-group-text"> <i class="fa fa-calendar"></i> </span>
+          </div>
+          <input name="dateRange" [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="dateRange"
+            class="form-control" [max]="today" [min]="minimumDate" readonly="true" placeholder="MM-DD-YYYY"
+            (ngModelChange)="saverange($event)">
+          <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+        </div>
+        <!-- <small class="form-text date-valid-message"
+          [ngStyle]="{'opacity': reportForm.get('dateRange').hasError('incorrect') ? '1' : '0'}">Maximum range value is
+          10.</small> -->
+        <!-- <label for="dateRange">Select Range: </label>
+        <input name="dateRange" formControlName="dateRange" [owlDateTime]="dateRange"
+          placeholder="DD-MM-YYYY - DD-MM-YYYY" [owlDateTimeTrigger]="dateRange" class="form-control"
+          [selectMode]="'range'" [rangeSeparator]="' - '" [max]="today" [min]="minimumDate" readonly="true" />
+
+        <owl-date-time [firstDayOfWeek]="'1'" [pickerType]="'calendar'" #dateRange></owl-date-time>
+        <small class="form-text date-valid-message"
+          [ngStyle]="{'opacity': reportForm.get('dateRange').hasError('incorrect') ? '1' : '0'}">Maximum range value is
+          10.</small> -->
+      </div>
+    </div>
+    <div class="col-md-3">
+      <label for="dateRange">To Date : </label>
+      <div class="input-group">
+        <div class="input-group-prepend"> <span class="input-group-text"> <i class="fa fa-calendar"></i> </span> </div>
+        <input name="dateRange" [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" formControlName="dateRange1"
+          class="form-control" [max]="somedate1" [min]="minimumDate1" readonly="true" placeholder="MM-DD-YYYY">
+        <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+      </div>
+      <!-- <small class="form-text date-valid-message"
+        [ngStyle]="{'opacity': reportForm.get('dateRange1').hasError('incorrect') ? '1' : '0'}">Maximum range value is
+        10.</small> -->
+    </div>
+
+    <!-- <div [ngClass]="{'col-md-4 mb-sm-4': userRole === 'ROLE_ADMIN', 'col-md-4 mb-sm-6': userRole !== 'ROLE_ADMIN'}">
+      <label>Select Sub-category: </label>
+      <div class="subCatContainer">
+        <div class="custom-control custom-radio custom-control-inline cursor-pointer">
+          <input type="radio" id="customRadioInline1" formControlName="subCat" class="custom-control-input"
+            value="my_wallet1">
+          <label class="custom-control-label" for="customRadioInline1">My Wallet1</label>
+        </div>
+        <div class="custom-control custom-radio custom-control-inline cursor-pointer">
+          <input type="radio" id="customRadioInline2" formControlName="subCat" class="custom-control-input"
+            value="my_wallet2">
+          <label class="custom-control-label" for="customRadioInline2">My Wallet2</label>
+        </div>
+        <div class="custom-control custom-radio custom-control-inline cursor-pointer">
+          <input type="radio" id="customRadioInline5" formControlName="subCat" class="custom-control-input"
+            value="wallet_interchange">
+          <label class="custom-control-label" for="customRadioInline5">Wallet Interchange</label>
+        </div>
+        <div class="custom-control custom-radio custom-control-inline cursor-pointer" *ngIf="userRole === 'ROLE_ADMIN'">
+          <input type="radio" id="customRadioInline6" formControlName="subCat" class="custom-control-input"
+            value="user_wallet1">
+          <label class="custom-control-label" for="customRadioInline6">User Wallet1</label>
+        </div>
+      </div>
+    </div> -->
+    <div class="col-md-3" *ngIf="userRole === 'ROLE_ADMIN'">
+      <div class="form-group" *ngIf="reportForm.get('subCat').value === 'user_wallet1'">
+        <label>Type Username: </label>
+        <!-- <input type="text" class="form-control" formControlName="userName" (input)="searchUsers($event)"> -->
+        <input type="text" class="form-control" formControlName="userName" [matAutocomplete]="autoUserName">
+        <mat-autocomplete #autoUserName="matAutocomplete" [displayWith]="autoDisplay">
+          <mat-option *ngFor="let user of usernameList" [value]="user">
+            {{user.userName}}
+          </mat-option>
+        </mat-autocomplete>
+      </div>
+      <div class="form-group" *ngIf="reportForm.get('subCat').value === 'user_wallet2'">
+        <label>Type Username: </label>
+        <!-- <input type="text" class="form-control" formControlName="userName" (input)="searchUsers($event)"> -->
+        <input type="text" class="form-control" formControlName="userName" [matAutocomplete]="autoUserName">
+        <mat-autocomplete #autoUserName="matAutocomplete" [displayWith]="autoDisplay">
+          <mat-option *ngFor="let user of usernameList" [value]="user" (click)="populateBene(user)">
+            {{user.userName}}
+          </mat-option>
+        </mat-autocomplete>
+      </div>
+    </div>
+    <div class="col-md-2 submitBtnCol">
+      <div class="form-group">
+        <button *ngIf="!fetchingReport && !reportForm.invalid" style="margin-bottom: -29%;" type="submit"
+          class="btn btn-primary"><i class="fa fa-search"></i> Submit</button>
+        <button *ngIf="fetchingReport || reportForm.invalid" style="margin-bottom: -29%;" type="button"
+          class="btn btn-primary" disabled> <i class="fa fa-search"></i> Submit</button>
+      </div>
+    </div>
+  </div>
+</form>
+<ngx-spinner name="userListSpinner">
+  <p style="color: white; margin-top: 50px;"> Fetching Usernames... </p>
+</ngx-spinner>

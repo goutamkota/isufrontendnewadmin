@@ -1,0 +1,499 @@
+<div class="detail card p-3">
+    <div class="lbl">
+        <br>
+        <h6><strong><span class="text-danger">*</span>Please enter below details. All Feilds are
+                mandatory</strong></h6>
+    </div>
+    <form row [formGroup]="UserDetailForm">
+        <!--  -->
+        <div class="row mt-4">
+            <div class="col-sm-4">
+                <mat-label class="form_label"><strong>User Type</strong><span
+                        class="text-danger">*</span>
+                </mat-label>
+                <mat-form-field class="w-100" appearance="outline">
+                    <input matInput formControlName="userType" id="userType" type='text'
+                        placeholder="Card Holder Name" aria-label="UsrMode"
+                        [matAutocomplete]="userModeMat" autocomplete="off" onkeydown="return false"
+                        required>
+                    <mat-autocomplete #userModeMat="matAutocomplete">
+                        <mat-option *ngFor="let mode of usermodes" [value]="mode">
+                            <span>{{mode}}</span>
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+
+            <div class="col-sm-4">
+                <mat-label class="form_label"><strong>First Name</strong><span
+                        class="text-danger">*</span>
+                </mat-label>
+                <mat-form-field class="w-100" appearance="outline">
+                    <input matInput formControlName="f_name" id="f_name" type='text'
+                        placeholder="Enter First Name" autocomplete="off"
+                        (keypress)="omit_special_char($event)" required>
+                    <mat-error *ngIf="UserDetailForm.get('f_name').hasError('required')">
+                        <span class="err-message">&nbsp;This field can't be blank</span>
+                    </mat-error>
+                    <mat-error *ngIf="UserDetailForm.get('f_name').hasError('pattern')">
+                        <span class="err-message">&nbsp;Enter Valid Name.</span>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="col-sm-4">
+                <mat-label class="form_label"><strong>Last Name</strong><span
+                        class="text-danger">*</span></mat-label>
+                <mat-form-field class="w-100" appearance="outline">
+                    <input matInput formControlName="l_name" id="l_name" type='text'
+                        placeholder="Enter Last Name" autocomplete="off"
+                        (keypress)="omit_special_char($event)" required>
+                    <mat-error *ngIf="UserDetailForm.get('l_name').hasError('required')">
+                        <span class="err-message">&nbsp;This field can't be blank</span>
+                    </mat-error>
+                    <mat-error *ngIf="UserDetailForm.get('l_name').hasError('pattern')">
+                        <span class="err-message">&nbsp;Enter Valid Name.</span>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <!--  -->
+
+        <div class="row mt-1">
+            <div class="col-sm-4">
+                <mat-label class="form_label"><strong>Email</strong><span class="text-danger">*</span>
+                </mat-label>
+                <mat-form-field class="w-100" appearance="outline">
+                    <input matInput formControlName="email" id="email" type='text'
+                        placeholder="Eg: xyz@gmail.com" autocomplete="off" required>
+                    <mat-error *ngIf="UserDetailForm.get('email').hasError('required')">
+                        <span class="err-message">&nbsp;This field can't be blank</span>
+                    </mat-error>
+                    <mat-error *ngIf="UserDetailForm.get('email').hasError('pattern')">
+                        <span class="err-message">&nbsp;Enter Valid Email.</span>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-4">
+                <mat-label class="form_label"><strong>Phone Number</strong><span
+                        class="text-danger">*</span>
+                </mat-label>
+                <mat-form-field class="w-100" appearance="outline">
+                    <input matInput formControlName="ph_num" id="ph_num" type='text'
+                        placeholder="Eg: 9874563214" minlength="10" maxlength="10"
+                        (keypress)="omit_special_char($event) && omit_char($event)" autocomplete="off"
+                        required>
+                    <mat-error *ngIf="UserDetailForm.get('ph_num').hasError('required')">
+                        <span class="err-message">&nbsp;This field can't be blank</span>
+                    </mat-error>
+                    <mat-error *ngIf="UserDetailForm.get('ph_num').hasError('pattern')">
+                        <span class="err-message">&nbsp;Enter Valid Ph Num.</span>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-4">
+                <mat-label class="form_label"><strong>Shop Name</strong><span
+                        class="text-danger">*</span>
+                </mat-label>
+                <mat-form-field class="w-100" appearance="outline">
+                    <!-- <mat-label></mat-label> -->
+                    <input matInput formControlName="shop_name" id="shop_name" type='text'
+                        (keypress)="omit_special_char($event)" placeholder="Enter Shop Name"
+                        autocomplete="off" required>
+                    <mat-error *ngIf="UserDetailForm.get('shop_name').hasError('required')">
+                        <span class="err-message">&nbsp;This field can't be blank</span>
+                    </mat-error>
+                    <mat-error *ngIf="UserDetailForm.get('shop_name').hasError('pattern')">
+                        <span class="err-message">&nbsp;Enter Valid Name.</span>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <!--  -->
+
+        <div class="row mt-1">
+            <div class="col-sm-4">
+                <mat-label class="form_label"><strong>Address</strong><span class="text-danger">*</span>
+                </mat-label>
+                <mat-form-field class="w-100" appearance="outline">
+                    <!-- <mat-label></mat-label> -->
+                    <input matInput formControlName="address" id="address" type='text'
+                        placeholder="Enter Address" autocomplete="off" required>
+                    <mat-error *ngIf="UserDetailForm.get('address').hasError('required')">
+                        <span class="err-message">&nbsp;This field can't be blank</span>
+                    </mat-error>
+                    <mat-error *ngIf="UserDetailForm.get('address').hasError('pattern')">
+                        <span class="err-message">&nbsp;Enter Valid Adress.</span>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-4">
+                <mat-label class="form_label"><strong>PinCode</strong><span class="text-danger">*</span>
+                </mat-label>
+                <mat-form-field class="w-100" appearance="outline">
+                    <!-- <mat-label></mat-label> -->
+                    <input matInput formControlName="pin_code" id="pin_code" type='text'
+                        (keypress)="omit_special_char($event) && omit_char($event)" minlength="6"
+                        maxlength="6" placeholder="Enter PinCode" autocomplete="off" required>
+                    <mat-error *ngIf="UserDetailForm.get('pin_code').hasError('required')">
+                        <span class="err-message">&nbsp;This field can't be blank</span>
+                    </mat-error>
+                    <mat-error *ngIf="UserDetailForm.get('pin_code').hasError('pattern')">
+                        <span class="err-message">&nbsp;Enter Valid PinCode.</span>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-sm-4" *ngIf="opt_fld">
+                <mat-label class="form_label"><strong>City</strong><span class="text-danger">*</span>
+                </mat-label>
+                <mat-form-field class="w-100" appearance="outline">
+                    <!-- <mat-label></mat-label> -->
+                    <input matInput readonly formControlName="city_name" id="city_name" type='text'
+                        autocomplete="off" required>
+                </mat-form-field>
+            </div>
+
+        </div>
+        <!--  -->
+        <div class="row mt-1" *ngIf="opt_fld">
+            <div class="col-sm-4">
+                <mat-label class="form_label"><strong>State</strong><span class="text-danger">*</span>
+                </mat-label>
+                <mat-form-field class="w-100" appearance="outline">
+                    <!-- <mat-label></mat-label> -->
+                    <input matInput readonly formControlName="state" id="state" type='text'
+                        autocomplete="off" required>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row mt-3" *ngIf="UserDetailForm.valid">
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <button type="submit" (click)="getOTP();" value="Disabled"
+                        class="btn btn-info w-100 text-center" id="btn_info"
+                        [disabled]="!UserDetailForm.valid">Send OTP
+                    </button>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-info w-100 text-center" (click)="submit()"
+                        id="btn_info" [disabled]="!Otp_Form.valid">Next</button>
+                </div>
+            </div>
+        </div>
+        <!--  -->
+    </form>
+</div>
+
+<div class="container">
+
+
+    <!-- User Document Form -->
+
+    <div class="col-sm-12" *ngIf="detail_user">
+        <div class="col-sm-12 reportHeader animate__animated animate__fadeInRight">
+            <a [routerLink]="['/v1/dashboard/analytics']">
+                <button type="button" class="btn btn-icon btn-rounded"><i
+                        class="fas fa-chevron-circle-left"></i></button>
+            </a>
+            <h5>Create User</h5>
+        </div>
+        <div class="report-form animate__animated animate__fadeInRight">
+            <div class="container">
+                <div class="col-sm-12 documents">
+                    <div class="lbl_header mt-3">
+                        <h6><strong><span class="text-danger">*</span>Please fill credential details</strong></h6>
+                    </div>
+                    <form row [formGroup]="UserDocumentForm" (ngSubmit)="submit()">
+                        <div class="row mt-1">
+                            <div class="col-sm-4">
+                                <mat-label class="form_label"><strong>User Name</strong><span
+                                        class="text-danger">*</span>
+                                </mat-label>
+                                <div class="form-group">
+                                    <mat-form-field class="w-100" appearance="outline">
+                                        <input matInput formControlName="user_name" id="user_name" type='text'
+                                            (input)="validUserNames()" maxlength="20" minlength="2"
+                                            (keypress)="omit_special_char($event)" placeholder="Eg: xyz@gmail.com"
+                                            autocomplete="off" required>
+                                    </mat-form-field>
+                                    <!-- <div *ngIf="prsnlUsernameToggle==true">
+                                        <span class="err-message">Password Match</span>
+                                    </div> -->
+                                    <div *ngIf="prsnlUsernameToggle==false">
+                                        <span class="text-danger">Username is already taken, try an unique
+                                            username.</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <mat-label class="form_label"><strong>Password</strong><span
+                                        class="text-danger">*</span>
+                                </mat-label>
+                                <div class="form-group">
+                                    <mat-form-field class="w-100" appearance="outline">
+                                        <input matInput formControlName="password" id="password" minlength="8"
+                                            maxlength="10" [type]="hide ? 'password' : 'text'"
+                                            placeholder="Enter Password" autocomplete="off" required>
+                                        <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' :
+                                            'visibility'}}</mat-icon>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <mat-label class="form_label"><strong>Confirm Password</strong><span
+                                        class="text-danger">*</span>
+                                </mat-label>
+                                <mat-form-field class="w-100" appearance="outline">
+                                    <input matInput formControlName="con_password" id="con_password"
+                                        (input)="confirmPasswordUser()" [type]="hide ? 'password' : 'text'"
+                                        minlength="8" maxlength="10" placeholder="Confirm Password" autocomplete="off"
+                                        required>
+                                    <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' :
+                                        'visibility'}}</mat-icon>
+                                </mat-form-field>
+                                <div *ngIf="prsnlconfirmpassWordToggle==true">
+                                    <span class="err-message">Password Match</span>
+                                </div>
+                                <div *ngIf="prsnlconfirmpassWordToggle==false">
+                                    <span class="text-danger">Enter Correct Password</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <app-card [hidHeader]="true" cardClass="mb-0 bg-grey">
+                            <div class="col-sm-12">
+                                <div class="lbl">
+                                    <p class="msg_doc"><span class="text-danger">*</span>Upload your Aadhaar and Pan
+                                        along with
+                                        Aadhaar
+                                        and Pan Number.</p>
+                                </div>
+                            </div>
+                            <div class="row mt-3 col-sm-12">
+                                <div class="col-sm-6">
+                                    <mat-label class="form_label"><strong>Upload
+                                            Aadhar</strong><span class="text-danger">*</span>
+                                    </mat-label>
+                                    <div class="col-sm-12 aadhar_data">
+                                        <div class="aadhar_field">
+                                            <label class="lblUploadFileaadhar" for="aadhar">
+                                                <div class="aadhar_upload">
+                                                    <img src="assets/images/CrtshowUser/upload.svg" alt="">
+                                                </div>
+                                                <div class="col-sm-12">
+                                                    <p class="up_msg">Upload Aadhar Card</p>
+                                                    <div class="col-sm-12">
+                                                        <p class="size_msg">(Max Size Up to 1mb)</p>
+                                                    </div>
+                                                </div>
+                                                <input type="file" id="aadhar" formControlName="aadhar"
+                                                    class="aadhar-img ng-pristine ng-empty ng-invalid ng-invalid-required ng-touched"
+                                                    (change)="onFileChangeaadhar($event)" accept="image/*" required=""
+                                                    style="visibility:hidden;" aria-invalid="true">
+                                            </label>
+
+                                        </div>
+                                        <div class="aadhar_preview">
+                                            <label class="lblUploadFileaadharimg" for="aadhar">
+                                                <img aria-readonly="true" id="aadhar_id" src="{{downloadURLaadhar}}">
+                                                <!-- <span class="absPostn uploadIcon"
+                                                *ngIf="downloadURLaadhar==null || downloadURLaadhar==undefined">
+                                                <i class="fa fa-upload" aria-hidden="true"></i>
+                                            </span> -->
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-sm-6">
+                                    <mat-label class="form_label"><strong>Upload
+                                            Pan</strong><span class="text-danger">*</span>
+                                    </mat-label>
+                                    <div class="col-sm-12 pan_data">
+                                        <div class="pan_field">
+                                            <label class="lblUploadFilepan" for="pan">
+                                                <div class="aadhar_upload">
+                                                    <img src="assets/images/CrtshowUser/upload.svg" alt="">
+                                                </div>
+                                                <div class="col-sm-12">
+                                                    <p class="up_msg">Upload Pan Card</p>
+                                                    <div class="col-sm-12">
+                                                        <p class="size_msg">(Max Size Up to 1mb)</p>
+                                                    </div>
+                                                </div>
+                                                <input type="file" id="pan" formControlName="pan"
+                                                    class="pan-img ng-pristine ng-empty ng-invalid ng-invalid-required ng-touched"
+                                                    (change)="onFileChangepan($event)" accept="image/*" required=""
+                                                    style="visibility:hidden;" aria-invalid="true">
+                                            </label>
+                                        </div>
+                                        <div class="pan_preview">
+                                            <label class="lblUploadFilepanimg" for="aadhar">
+                                                <img id="pan_id" src="{{downloadURLpan}}">
+
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row col-sm-12 aadhar_pan">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <mat-form-field class="w-100" appearance="outline">
+                                            <!-- <mat-label</mat-label> -->
+                                            <input matInput formControlName="aadhar_no" id="aadhar_no" type='text'
+                                                placeholder="Enter Aadhar Number" autocomplete="off"
+                                                (keypress)="omit_special_char($event) && omit_char($event)" required>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <mat-form-field class="w-100" appearance="outline">
+                                            <!-- <mat-label>Upload </mat-label> -->
+                                            <input matInput formControlName="pan_no" id="pan_no" type='text'
+                                                placeholder="Enter Pan Number" autocomplete="off"
+                                                (keypress)="omit_special_char($event)" required>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+                        </app-card>
+
+
+                        <div class="row mt-3">
+                            <div class="col-sm-4">
+                                <mat-label class="form_label"><strong>Email</strong><span class="text-danger">*</span>
+                                </mat-label>
+                                <div class="form-group">
+                                    <mat-form-field class="w-100" appearance="outline">
+                                        <!-- <mat-label>Email</mat-label> -->
+                                        <input matInput readonly formControlName="email" id="email" type='text'
+                                            placeholder="Eg: xyz@gmail.com" autocomplete="off" required>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <mat-label class="form_label"><strong>OTP</strong><span class="text-danger">*</span>
+                                </mat-label>
+                                <div class="form-group">
+                                    <mat-form-field class="w-100" appearance="outline">
+                                        <!-- <mat-label>OTP</mat-label> -->
+                                        <input matInput formControlName="email_otp" id="email_otp" type='text'
+                                            placeholder="Enter OTP"
+                                            (keypress)="omit_special_char($event) && omit_char($event)"
+                                            autocomplete="off" required>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-sm-3">
+                                <div class="form-group py-1">
+                                    <button type="submit" (click)="getemail_OTP()"
+                                        class="btn btn-info w-100 text-center" id="btn_info">Send OTP
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group py-1">
+                                    <button type="submit" (click)="veri_creUser()"
+                                        class="btn btn-info w-100 text-center" id="btn_info">Verify OTP and Create
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="col-sm-12">
+                        <button type="submit" (click)="back_page()" class="btn btn-info w-40 text-center"
+                            id="back_btn"><span>&#8592;Back</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Confirm Modal -->
+<div class="col-sm-12">
+    <app-ui-modal #createUser [dialogClass]="'modal-lg modal-dialog-centered'">
+
+        <div class="app-modal-body" id="confirm_modal">
+            <p>Are you sure all informations provided correct! Click OK to proceed or CANCEL for make changes! Do you
+                want to proceed?</p>
+        </div>
+        <div class="app-modal-footer">
+            <div class="row my-3" id="confirm_btn">
+                <button type="button" class="btn btn-secondary mr-3" id="btn_cancel" data-dismiss="modal"
+                    (click)="createUser.hide()">Cancel</button>
+                <button type="button" class="btn btn-info" id="btn_proceed" (click)="Create_user()">Proceed</button>
+            </div>
+        </div>
+    </app-ui-modal>
+</div>
+
+
+<!-- OTP Modal -->
+<div class="col-sm-12">
+    <app-ui-modal #otpForm dialogClass="modal-dialog-centered" style="background: #20C2C4 0% 0% no-repeat padding-box;
+    border-radius: 5px;
+    opacity: 1;">
+        <div class="app-modal-header">
+            <!-- <div class="modal-header"> -->
+            <h4 class="Otp_msg">OTP Verification</h4>
+            <button type="button" class="close basic-close" data-dismiss="modal" aria-label="Close"
+                (click)="otpForm.hide()"><span aria-hidden="true">&times;</span></button>
+
+            <!-- </div> -->
+        </div>
+        <div class="app-modal-body">
+            <div class="col-sm-12">
+                <h5 class="otp_msg">Enter OTP sent to your Mobile</h5>
+            </div>
+            <form row [formGroup]="Otp_Form" (ngSubmit)="submit()">
+                <!-- <div class="col-sm-6 col-md-8"> -->
+                <div class="row col-sm-12 otp_pannel">
+                    <input type="text" #otp1 formControlName="otp1" id="otp1" minlength="1" maxlength="1"
+                        style="border-radius: 10px; height: 50px; width: 50px; margin-left: 5px;"
+                        (input)="otpClick($event, '' , otp2)">
+                    <input type="text" #otp2 formControlName="otp2" id="otp2" minlength="1" maxlength="1"
+                        style="border-radius: 10px; height: 50px; width: 50px; margin-left: 5px;"
+                        (input)="otpClick($event, otp1, otp3)">
+                    <input type="text" #otp3 formControlName="otp3" id="otp3" minlength="1" maxlength="1"
+                        style="border-radius: 10px; height: 50px; width: 50px; margin-left: 5px;"
+                        (input)="otpClick($event, otp2, otp4)">
+                    <input type="text" #otp4 formControlName="otp4" id="otp4" minlength="1" maxlength="1"
+                        style="border-radius: 10px; height: 50px; width: 50px; margin-left: 5px;"
+                        (input)="otpClick($event, otp3, otp5)">
+                    <input type="text" #otp5 formControlName="otp5" id="otp5" minlength="1" maxlength="1"
+                        style="border-radius: 10px; height: 50px; width: 50px; margin-left: 5px;"
+                        (input)="otpClick($event, otp4, otp6)">
+                    <input type="text" #otp6 formControlName="otp6" id="otp6" minlength="1" maxlength="1"
+                        style="border-radius: 10px; height: 50px; width: 50px; margin-left: 5px;"
+                        (input)="otpClick($event, otp5, '')">
+                </div>
+                <!-- <div class="text-center">OTP can be sent again after : <span id="timer"></span></div> -->
+                <div class="row mt-1 col-sm-12 otp_pannel">
+                    <!-- <div class=""> -->
+                    <div class="col-6 px-0 pr-1 mt-3"><button type="submit"
+                            class="btn btn-outline-info w-100 text-center" id="no_resend"
+                            (click)="otpForm.hide()">RESEND</button>
+                    </div>
+                    <div class="col-6 px-0 pr-1 mt-3"><button type="submit" (click)="Otp_verify()"
+                            class="btn btn-info w-100 text-center" id="no_verify">VERIFY</button>
+                    </div>
+                    <!-- <div class="col-6 px-0 pl-1 mt-1"><button type="button" (click)="debitpay()" class="btn btn-info w-100 text-center">Make Payment</button></div> -->
+                    <!-- </div> -->
+                </div>
+                <!-- </div> -->
+            </form>
+        </div>
+
+    </app-ui-modal>
+</div>

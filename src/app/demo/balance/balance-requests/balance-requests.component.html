@@ -1,0 +1,139 @@
+<div class="balance-requests-container">
+
+    <app-card [hidHeader]="true">
+
+        <form [formGroup]="balanceRequestForm" (submit)="fetchBalanceRequests()">
+            <div class="row">
+                <div class="'col-md-3'">
+                    <div class="form-group">
+                      <label for="dateRange">From Date :</label>
+                      <div class="input-group">
+                        <div class="input-group-prepend"> <span class="input-group-text"> <i class="fa fa-calendar"></i> </span>
+                        </div>
+                        <input name="dateRange" [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" formControlName="dateRange"
+                          class="form-control" [max]="today" [min]="minimumDate" readonly="true" placeholder="MM-DD-YYYY"
+                          (ngModelChange)="saverange($event)">
+                        <owl-date-time [pickerType]="'calendar'" #dt1></owl-date-time>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <label for="dateRange">To Date : </label>
+                    <div class="input-group">
+                      <div class="input-group-prepend"> <span class="input-group-text"> <i class="fa fa-calendar"></i> </span> </div>
+                      <input name="dateRange" [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" formControlName="dateRange1"
+                        class="form-control" [max]="somedate1" [min]="minimumDate1" readonly="true" placeholder="MM-DD-YYYY">
+                      <owl-date-time [pickerType]="'calendar'" #dt2></owl-date-time>
+                    </div>
+                  </div>
+                <div class="col col-md-3 my-2">
+                    <div class="balance-request-btn-container">
+                        <button type="submit" class="btn btn-primary btn-block" [disabled]="balanceRequestForm.invalid">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </app-card>
+
+    <div class="dataTable">
+        <div class="d-flex flex-row dtBtns">
+            <div class="table-exc-print">
+                <button type="button" class="btn btn-primary" (click)="downloadExcel()"><i class="feather icon-file"></i> Excel</button>
+            </div>
+            <div class="col-md-3 my-3">
+                <div class="input-group searchInput">
+                    <div class="input-group-prepend"> <span class="input-group-text" id="basic-addon1"> <i class="feather icon-search"></i> </span> </div>
+                    <input type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="basic-addon1" (keyup)="updateFilter($event)" [formControl]="searchInput"> 
+                </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="requests.records.length">
+        <ngx-datatable #table class="material" [headerHeight]="50" [footerHeight]="50" [limit]="10" [rows]="requests.records" columnMode="force" [scrollbarH]="true" [columns]="requests.recordHeaders" [rowHeight]="50">
+            <ngx-datatable-footer>
+                <ng-template ngx-datatable-footer-template let-rowCount="rowCount"
+                  let-pageSize="pageSize" let-selectedCount="selectedCount" let-curPage="curPage"
+                  let-offset="offset" let-isVisible="isVisible">
+                  <div class="countAlign">
+                    <span>Total:&nbsp;{{rowCount}}</span>
+                  </div>
+                  <div class="page-limit-container">
+                    <select (change)="onLimitChange($event.target.value)" class="form-control px-1">
+                      <option *ngFor="let option of pageLimitOptions" [value]="option.value"
+                        [selected]="option.value == currentPageLimit">
+                        {{option.value}}
+                      </option>
+                    </select>
+                  </div>
+      
+                  <datatable-pager [pagerLeftArrowIcon]="'datatable-icon-left'"
+                    [pagerRightArrowIcon]="'datatable-icon-right'"
+                    [pagerPreviousIcon]="'datatable-icon-prev'"
+                    [pagerNextIcon]="'datatable-icon-skip'" [page]="curPage" [size]="pageSize"
+                    [count]="rowCount" [hidden]="!((rowCount / pageSize) > 1)"
+                    (change)="table.onFooterPage($event)">
+                  </datatable-pager>
+                </ng-template>
+              </ngx-datatable-footer>
+            </ngx-datatable>
+    </div>
+
+    <ng-template #dateTemplate let-value="value"> <span>{{ value | date: 'medium' }}</span></ng-template>
+
+    <ng-template #statusTemplate let-value="value">
+        <span *ngIf="['SUCCESS', 'REFUNDED', 'APPROVED'].includes(value)" class="badge m-r-5 badge-pill badge-success">{{value}}</span> 
+        <span *ngIf="['INPROGRESS', 'INITIATED', 'ONHOLD', 'PENDING' , 'REINITIATED'].includes(value)" class="badge m-r-5 badge-pill badge-warning">{{value}}</span> 
+        <span *ngIf="['FAILED', 'REJECTED'].includes(value)" class="badge m-r-5 badge-pill badge-danger">{{value}}</span>
+    </ng-template>
+
+    <ng-template #actionTemplate let-row="row" let-col="column">
+        <div class="action-column-container">
+            <ng-container *ngIf="row.paymentRequestType !== 'case4'">
+                <i class="feather icon-check-circle text-success" [placement]="'left'" ngbTooltip="Accept" (click)="formatUpdateBalanceStatus({request: row, status: 'APPROVED'})"></i>
+                <i class="feather icon-x-circle text-danger" [placement]="'left'" ngbTooltip="Decline" (click)="formatUpdateBalanceStatus({request: row, status: 'REJECTED'})"></i>
+                <i *ngIf="row.status !== 'ONHOLD' && row.status !== 'REINITIATED'" class="feather icon-alert-circle text-warning" [placement]="'left'" ngbTooltip="Hold" (click)="formatUpdateBalanceStatus({request: row, status: 'ONHOLD'})"></i>
+            </ng-container>
+
+            <i class="feather icon-clipboard" [placement]="'left'" ngbTooltip="Remarks" (click)="showRemarks(row.remarks)"></i>
+            <i class="feather icon-download" [placement]="'left'" ngbTooltip="Receipt" (click)="downloadReceipt(row.receiptLink)"></i>
+        </div>
+    </ng-template>
+
+</div>
+
+<app-ui-modal #commentModal dialogClass="modal-dialog-centered">
+
+    <div class="app-modal-header">
+        <h5 class="modal-title">Please provide a comment</h5>
+        <button type="button" class="close basic-close" data-dismiss="modal" aria-label="Close" (click)="commentModal.hide()"><span aria-hidden="true">&times;</span></button>
+    </div>
+
+    <div class="app-modal-body">
+        <div class="form-group">
+            <select class="custom-select" [formControl]="commentControl.comment">
+              <option class="disabled" value="" disabled>Choose Comment</option>
+              <option *ngFor="let comment of commentControl.comments" [value]="comment" >{{ comment }}</option>
+            </select>
+            <div class="form-group mt-3" *ngIf="commentControl.comment.value === 'ANY OTHER'">
+                <input type="text" class="form-control" placeholder="Specify Other Reason" [formControl]="commentControl.otherComment">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="comment-btn-container">
+                <ng-container *ngIf="commentControl.comment.value === 'ANY OTHER'">
+                    <button type="button" class="btn btn-primary" [disabled]="commentControl.comment.invalid || commentControl.otherComment.invalid" (click)="handleUnapprovedStatus()">Submit</button>
+                </ng-container>
+                <ng-container *ngIf="commentControl.comment.value !== 'ANY OTHER'">
+                    <button type="button" class="btn btn-primary" [disabled]="commentControl.comment.invalid" (click)="handleUnapprovedStatus()">Submit</button>
+                </ng-container>
+                <button type="button" class="btn btn-danger" (click)="commentModal.hide()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+</app-ui-modal>
+
+<ngx-spinner name="fetchRequestsSpinner"><p style="color: white; margin-top: 50px;" > Fetching Balance Requests... </p></ngx-spinner>
+<ngx-spinner name="updateRequestSpinner"><p style="color: white; margin-top: 50px;" > Updating Balance Request Status... </p></ngx-spinner>

@@ -1,0 +1,41 @@
+<form [formGroup]="reportForm" (submit)="submitReport()">
+  <div class="row">
+    <div class="col-md-5">
+      <div class="form-group">
+        <label for="dateRange">Select Range: </label>
+        <input name="dateRange" formControlName="dateRange" [owlDateTime]="dateRange"
+          placeholder="DD-MM-YYYY - DD-MM-YYYY" [owlDateTimeTrigger]="dateRange" class="form-control"
+          [selectMode]="'range'" [rangeSeparator]="' - '" [max]="today" [min]="minimumDate" readonly="true" />
+
+        <owl-date-time [firstDayOfWeek]="'1'" [pickerType]="'calendar'" #dateRange></owl-date-time>
+        <small class="form-text date-valid-message"
+          [ngStyle]="{'opacity': reportForm.get('dateRange').hasError('incorrect') ? '1' : '0'}">Maximum range value is
+          10.</small>
+      </div>
+    </div>
+    <div class="col-md-5 mb-sm-4">
+      <label>Select Sub-category: </label>
+      <div class="subCatContainer">
+        <div class="custom-control custom-radio custom-control-inline">
+          <input type="radio" id="customRadioInline1" formControlName="subCat" class="custom-control-input" value="all">
+          <label class="custom-control-label" for="customRadioInline1">All Transactions</label>
+        </div>
+        <div class="custom-control custom-radio custom-control-inline">
+          <input type="radio" id="customRadioInline2" formControlName="subCat" class="custom-control-input"
+            value="success">
+          <label class="custom-control-label" for="customRadioInline2">Successfull Transactions</label>
+        </div>
+        <div class="custom-control custom-radio custom-control-inline">
+          <input type="radio" id="customRadioInline3" formControlName="subCat" class="custom-control-input"
+            value="refund">
+          <label class="custom-control-label" for="customRadioInline3">Refund Transactions</label>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2 submitBtnCol">
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary" [disabled]="reportForm.invalid">Submit</button>
+      </div>
+    </div>
+  </div>
+</form>

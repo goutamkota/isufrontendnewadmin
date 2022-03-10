@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "default": "iserveustaging",
+    "preprod": "iserveustaging"
+  }
+}

@@ -1,0 +1,167 @@
+<div class="card switch_cnt">
+    <div class="switch_topbar">
+        <button class="btn btn-primary waveEfct back" [routerLink]="['/v1/settings']"><i
+                class="fas fa-caret-left"></i>&nbsp;&nbsp;Back</button>
+        <div class="switch_title">Device Mapping</div>
+        <button border="none" class=" btn minimize" (click)="minimize()"><i class="far fa-window-minimize"></i></button>
+    </div>
+    <form [formGroup]="DeviceMappingForm">
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Search:</label>
+                    <input type="text" class="form-control" (keyup)="search($event.target.value)"
+                        fromControlName="search" placeholder="Search Here..">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label>Filter Status:</label>
+                    <select (change)="show_mapping($event.target.value)" class="form-control" fromControlName="status"
+                        id="mappingReoprt">
+                        <option value="All" class="custom-control-input" id="customRadioInline1">All</option>
+                        <option value="Mapped" class="custom-control-input" id="customRadioInline2">Mapped</option>
+                        <option value="Available" class="custom-control-input" id="customRadioInline3">Available
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </form>
+    <table class="switch_box" border="1px" style="width: 98%;" *ngIf='show'>
+        <tr style="height: 50px;">
+            <th style="text-align: center;">Device ID</th>
+            <th style="text-align: center;">Status</th>
+            <th style="text-align: center;">Retailer Name</th>
+            <th style="text-align: center;">Operation</th>
+            <!-- <th style="text-align: right;">
+                    <button class="btn btn-primary waveEfct" (click)="save_all()" id="save_button" style="cursor: not-allowed; height: 50px;" disabled><i class="fas fa-save"></i>&nbsp;&nbsp; Save</button>
+                </th> -->
+        </tr>
+        <tr *ngFor="let data of devicemapping_response; let i = index">
+            <td>{{data.device_sl_no}}</td>
+            <td>
+                <ng-container *ngIf="data.is_mapped === true;then mapped else available"></ng-container>
+                <ng-template #mapped>
+                    <span>Mapped</span>
+                </ng-template>
+                <ng-template #available>
+                    <span>Available</span>
+                </ng-template>
+
+            </td>
+
+            <td>{{data.mapped_retailer === null ? 'Not Assigned' : data.mapped_retailer}}</td>
+
+
+            <td>
+                <button (click)="showModal(data.device_sl_no)" class="btn btn-success not-allowed" [disabled]="data.is_mapped === true"
+                    title="Map Device"><i class="fa fa-user-plus" aria-hidden="true"></i></button>
+                <button (click)="showModal3(data.device_sl_no, data.mapped_retailer)" [disabled]="data.is_mapped === false"
+                    class="btn btn-warning not-allowed" title="Un-Map Device"><i class="fa fa-user-times"
+                        aria-hidden="true"></i></button>
+                <button (click)="showModal4(data.device_sl_no, data.mapped_retailer)" class="btn btn-primary not-allowed"
+                    [disabled]="data.is_mapped === false"><i class="fa fa-edit" aria-hidden="true"
+                        title="Edit Device"></i></button>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<form [formGroup]="MappingModalForm" (submit)="mappedUserDevice()">
+    <div id="myModal2" class="modal2">
+
+        <div class="css_modal_content2">
+            <div class="modal_header">Map Device</div>
+            <div class="modal_cnt">
+
+                <div class="form-group">
+                    <label>Search User to map device {{id1}}</label>
+                    <!-- <input type="text" class="form-control" fromControlName="searchuser"
+                        placeholder="Enter the username" matInput [matAutocomplete]="auto" (keyup)="searchname($event.target.value)"> -->
+                        <input type="text" class="form-control" placeholder="Enter the username" (input)="getuser($event)" formControlName="userName"
+
+                        autocomplete="off" required/>
+            
+                         <!-- </mat-form-field> -->
+            
+             <div #elasticResDiv class="elasticResDiv" *ngIf="showAutcompleteList===true" style="cursor: pointer;max-height: 136px; overflow: auto;position: absolute; z-index: 100;
+                
+                    width: 100%;
+                    max-width: 460px;
+                    box-shadow: 1px 1px 5px;">
+            
+                      <ul class="list-group">
+                        <li class="list-group-item" *ngFor="let user of mappedUser" (click)="eSelectUser(user)">
+                            {{user.username}} </li>
+            
+                        <!-- <li class="list-group-item" *ngFor="let user of eResults" (click)="eSelectUser(user)">
+                             {{user.uname}} {{'('}}{{user.id}}{{','}}{{user.name}}{{','}} {{user.userrole}} {{')'}} </li> -->
+             </ul>
+             </div>
+                </div>
+            </div>
+            <div class="close_prt_div">
+                <button class="btn btn-success" [disabled]="MappingModalForm.invalid">Map Device</button>
+                <button style="margin-left:15px;" class="btn btn-danger" (click)="close_css_modal()">Cancel</button>
+                <!-- <button class="close_btn" (click)="close_css_modal()">Cancel</button> -->
+            </div>
+
+        </div>
+
+    </div>
+</form>
+
+<div id="myModal3" class="modal2">
+
+    <div class="css_modal_content2">
+        <div class="modal_header">Un-Map Device</div>
+        <div class="modal_cnt">
+            <p>This device {{id2}} is mapped with user {{name}}</p>
+            <p>Are you sure to unmap the device ?</p>
+        </div>
+        <div class="close_prt_div">
+            <button class="btn btn-success">Yes</button>
+            <button style="margin-left:15px;" class="btn btn-danger" (click)="close_css_modal3()">No</button>
+            <!-- <button class="close_btn" (click)="close_css_modal()">Cancel</button> -->
+        </div>
+    </div>
+
+</div>
+
+<form [formGroup]="UpdateDeviceForm">
+    <div id="myModal4" class="modal2">
+
+        <div class="css_modal_content2">
+            <div class="modal_header">Update Device</div>
+            <div class="modal_cnt">
+                <div class="form-group">
+                    <label>Assign a new retailer to the device {{id3}}.</label>
+                    <input type="text" class="form-control" value="{{name2}}" formControlName="updateDevice">
+                </div>
+            </div>
+            <div class="close_prt_div">
+                <button class="btn btn-success">Map Device</button>
+                <button style="margin-left:15px;" class="btn btn-danger" (click)="close_css_modal4()">Cancel</button>
+                <!-- <button class="close_btn" (click)="close_css_modal()">Cancel</button> -->
+            </div>
+        </div>
+
+    </div>
+</form>
+
+<mat-autocomplete #auto="matAutocomplete" style="z-index: 999999;position: absolute;">
+
+    <mat-option *ngFor="let option of r_name" [value]="option">
+
+      {{option}}
+
+    </mat-option>
+
+  </mat-autocomplete>
+
+
+<ngx-spinner name="devicemappingSpinner">
+    <p style="color: white; margin-top: 50px;"> Fetching... </p>
+</ngx-spinner>

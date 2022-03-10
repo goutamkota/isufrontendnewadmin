@@ -1,0 +1,205 @@
+
+<div class="loader-container" *ngIf="searching">
+    <div class="loader"></div>
+</div>
+
+<div class="d-md-flex flex-row justify-content-between table-search">
+    <div class="input-group searchInput">
+        <div class="input-group-prepend"> <span class="input-group-text" id="basic-addon1"> <i
+                    class="feather icon-search"></i> </span> </div>
+        <input type="text" class="form-control" placeholder="Search in Table" (keyup)="updateFilter($event)">
+    </div>
+    <div class="total-records" [innerHTML]="tblOptions.showText"></div>
+
+
+
+    <div class="d-md-flex">
+        <div class="table-exc-print text-center">
+            <button type="button" class="btn btn-primary" (click)="downloadExcel()"
+                [attr.disabled]="filteredTbl.length ? null : 'disabled'"
+                [ngStyle]="{'background':colorObj.vibrant, 'border':'none'}"><i class="fa fa-download"></i>
+                Excel</button>
+
+                <button type="button" class="btn btn-primary" *ngIf="priActiveTab == 1" (click)="sendAllData(1)"
+                [attr.disabled]="filteredTbl.length ? null : 'disabled'"
+                [ngStyle]="{'background':colorObj.vibrant, 'border':'none'}"><i class="fa fa-envelope"></i>
+                Send All Data</button>
+
+                <button type="button" class="btn btn-primary" *ngIf="priActiveTab == 2" (click)="sendAllData(2)"
+                [attr.disabled]="filteredTbl.length ? null : 'disabled'"
+                [ngStyle]="{'background':colorObj.vibrant, 'border':'none'}"><i class="fa fa-envelope"></i>
+                Send All Data</button>
+
+                <button type="button" class="btn btn-primary" *ngIf="priActiveTab == 3" (click)="sendAllData(3)"
+                [attr.disabled]="filteredTbl.length ? null : 'disabled'"
+                [ngStyle]="{'background':colorObj.vibrant, 'border':'none'}"><i class="fa fa-envelope"></i>
+                Send All Data</button>
+
+                <button type="button" class="btn btn-primary" *ngIf="priActiveTab == 4" (click)="sendAllData(4)"
+                [attr.disabled]="filteredTbl.length ? null : 'disabled'"
+                [ngStyle]="{'background':colorObj.vibrant, 'border':'none'}"><i class="fa fa-envelope"></i>
+                Send All Data</button>
+
+
+        </div>
+    </div>
+
+ <!--  <div class="d-md-flex">
+        <div class="table-exc-print text-center">
+            <button type="button" class="btn btn-primary" (click)="downloadExcel()"
+                [attr.disabled]="filteredTbl.length ? null : 'disabled'"
+                [ngStyle]="{'background':colorObj.vibrant, 'border':'none'}"><i class="fa fa-envelope"></i>
+                Send All Data</button>
+        </div>
+    </div>-->
+
+
+</div>
+<div #TABLE class="table-responsive" (window:resize)="onResize($event)">
+    <table class="table table-striped table-bordered report-table" style="margin-bottom: 0;">
+        <thead [style.background]="colorObj.darkvibrant">
+            <tr>
+                <ng-container *ngFor="let col of titles; index as k">
+                    <th [ngClass]="{'squized':k >= visibleCols}">{{col}}</th>
+                </ng-container>
+                <th>Payment</th>
+                <th>Status</th>
+                <th>Expand</th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngFor="let tr of paging.data; index as i">
+                <tr [ngStyle]="showExpanded == i?{'background':'#4680ffb0'}:''">
+                    <ng-container *ngIf="showExpanded != i;else show_expanded">
+                        <ng-container *ngFor="let col of tcol; index as j">
+                            <td [ngClass]="{'squized':j >= visibleCols}">
+                                <ng-container *ngIf="dateIndex.indexOf(col) > -1;else convertDateTd">{{tr[col] | date}}</ng-container>
+                                <ng-template #convertDateTd><strong>{{tr[col]}}</strong></ng-template>
+                            </td>
+                        </ng-container>
+                    </ng-container>
+                    <ng-template #show_expanded>
+                        <td [attr.colspan]="visibleCols">
+                            <div class="flex">
+                                <ng-container *ngFor="let col of tcol; index as x">
+                                    <div class="data-block">
+                                        <small>{{titles[x]}}</small>
+                                        <strong *ngIf="dateIndex.indexOf(col) > -1;else convertDate">{{tr[col] |
+                                            date}}</strong>
+                                        <ng-template #convertDate><strong>{{tr[col]}}</strong></ng-template>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </td>
+                    </ng-template>
+                    <td width="60">
+<div class="d-flex" style="justify-content: center; align-items: center;">
+                            <i class="prText btn-round" [ngStyle]="{'background':colorObj.darkvibrant}" (click)="payModal(tr)">Pay</i>
+                            <i class="prText btn-round btn-orange" (click)="debitModal(tr)">Debit</i>
+                        </div>
+                        </td>
+                    <td width="60">
+                        <label class="switch mr-2">
+                            <input type="checkbox" (change)="userActive($event.target,tr)" [checked]="tr.active">
+                            <span class="slider round" [style.background]="tr.active?'#179400':''"></span>
+                        </label>
+                    </td>
+                    <td width="60">
+                            <div class="d-flex" style="justify-content: center; align-items: center;">
+                                <i class="btn-round" [ngClass]="(showExpanded == i)?'pr-chevron-up':'pr-chevron-down'"
+                                    (click)="(showExpanded == i)?showExpanded = -1:showExpanded = i"
+                                    [ngStyle]="{'background':colorObj.darkvibrant}">
+                                </i>
+                                <i class="prText pr-edit btn-round" [ngStyle]="{'background':colorObj.darkvibrant}" (click)="editModal(tr)"></i>
+                            </div>
+                        <!-- <span class="action-buttons" *ngIf="actionButtons">
+                            <i class="pr-gear btn-round"
+                            [ngStyle]="{'background':colorObj.darkvibrant}"></i>
+                            <span class="expandables">
+                                 <ng-container *ngFor="let btn of actionButtons">
+                                    <i class="btn-round" [ngClass]="btn.btnClass" (click)="btn.clk" [ngStyle]="{'background':colorObj.darkvibrant}">{{btn.btn}}</i>
+                                </ng-container> -- >
+                               <!-- <i class="prText btn-round" [ngStyle]="{'background':colorObj.darkvibrant}" (click)="payModal(tr.userName)">Pay</i>
+                                <i class="prText btn-round" [ngStyle]="{'background':colorObj.darkvibrant}">Debit</i>
+                                <i class="prText pr-edit btn-round" [ngStyle]="{'background':colorObj.darkvibrant}">Edit</i>
+                            </span>
+                        </span> -->
+                    </td>
+                </tr>
+            </ng-container>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td [attr.colspan]="visibleCols + 3" style="padding: 0;">
+                    <div class="tfoot" [ngStyle]="{'background':colorObj.darkvibrant+'dd'}">
+                        <div class="d-flex" style="min-width: 130px;">
+                            <div class="mr-3">Data Limit: </div>
+                            <select (change)="changeLimit($event.target.value)" class="form-control px-1"
+                                style="width: 50px;">
+                                <option *ngFor="let option of pageLimitOptions" [value]="option"
+                                    [selected]="option == paging.limit">
+                                    {{option}}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="d-flex" style="min-width: 130px;">
+                            <div class="mr-3">Column Limit: </div>
+                            <i class="pr-chevron-left left-btn" [ngStyle]="{'color':colorObj.darkvibrant}"
+                                (click)="changeColLimit(visibleCols-1)"></i>
+                            <input type="text" (change)="changeColLimit($event.target.value)" class="form-control px-1"
+                                [value]="visibleCols" style="width:50px; text-align: center;" readonly />
+                            <i class="pr-chevron-right right-btn" [ngStyle]="{'color':colorObj.darkvibrant}"
+                                (click)="changeColLimit(visibleCols+1)"></i>
+                        </div>
+
+                        <ul class="pagination">
+                            <li>
+                                <a title="go to first page" href="javascript:void(0)" role="button"
+                                    (click)="pageActive(1)"><i class="pr-step-backward"></i></a>
+                            </li>
+                            <li>
+                                <a title="go to previous page" href="javascript:void(0)" role="button"
+                                    (click)="pageActive(paging.active==1?paging.active:paging.active-1)"><i class="pr-angle-left"></i></a>
+                            </li>
+
+                            <ng-container *ngIf="paging.cnt > 6;else fullpagination">
+                                <li class="pages" [ngClass]="{'active':paging.active == (y+1)}"
+                                    *ngFor="let pn of counter(2);let y = index">
+                                    <a href="javascript:void(0)" (click)="pageActive(y+1)"> {{y+1}} </a>
+                                </li>
+                                <li *ngIf="paging.active > 3">....</li>
+                                <li class="pages" *ngIf="paging.active > 2 && paging.active < (paging.cnt)"
+                                    class="active">
+                                    <a href="javascript:void(0)"> {{paging.active}} </a>
+                                </li>
+                                <li *ngIf="(paging.cnt - 1) > paging.active">....</li>
+                                <li class="pages" [ngClass]="{'active':paging.active == paging.cnt}">
+                                    <a href="javascript:void(0)" (click)="pageActive(paging.cnt)"> {{paging.cnt}} </a>
+                                </li>
+                            </ng-container>
+                            <ng-template #fullpagination>
+                                <li class="pages" [ngClass]="{'active':paging.active == (y+1)}"
+                                    *ngFor="let pn of counter(paging.cnt) ;let y = index">
+                                    <a href="javascript:void(0)" (click)="pageActive(y+1)"> {{y+1}} </a>
+                                </li>
+                            </ng-template>
+
+                            <li>
+                                <a title="go to next page" href="javascript:void(0)" role="button"
+                                    (click)="pageActive(paging.active + 1)"><i class="pr-angle-right"></i></a>
+                            </li>
+                            <li>
+                                <a title="go to last page" href="javascript:void(0)" role="button"
+                                    (click)="pageActive(paging.cnt)"><i class="pr-step-forward"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+<!--<ngx-spinner name="reportSpinner">
+    <p style="color: white; margin-top: 50px;"> Fetching  Data... </p>
+</ngx-spinner>-->
